@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import {
   BookOpen,
   Trophy,
@@ -16,38 +16,73 @@ import {
   Star,
   TrendingUp,
   Calendar,
+  Loader2,
 } from "lucide-react";
-
-const stats = [
-  { label: "Lessons Completed", value: 12, icon: BookOpen, color: "text-primary" },
-  { label: "Current Streak", value: 5, icon: Flame, color: "text-warning" },
-  { label: "Total XP", value: 2450, icon: Zap, color: "text-accent" },
-  { label: "Achievements", value: 8, icon: Trophy, color: "text-success" },
-];
-
-const recentActivity = [
-  { title: "Binary Arithmetic", track: "Foundation", xp: 150, time: "2 hours ago", completed: true },
-  { title: "Introduction to Binary", track: "Foundation", xp: 100, time: "Yesterday", completed: true },
-  { title: "Boolean Algebra Basics", track: "Foundation", xp: 0, time: "In progress", completed: false },
-];
-
-const weeklyProgress = [
-  { day: "Mon", lessons: 2 },
-  { day: "Tue", lessons: 1 },
-  { day: "Wed", lessons: 3 },
-  { day: "Thu", lessons: 0 },
-  { day: "Fri", lessons: 2 },
-  { day: "Sat", lessons: 1 },
-  { day: "Sun", lessons: 0 },
-];
+import { useProgress } from "@/hooks/useProgress";
+import { useAuth } from "@/hooks/useAuth";
 
 const trackProgress = [
-  { name: "Foundation", progress: 25, total: 12, completed: 3, color: "bg-primary" },
-  { name: "Core Programming", progress: 0, total: 18, completed: 0, color: "bg-accent" },
-  { name: "ML & AI", progress: 0, total: 15, completed: 0, color: "bg-[hsl(330,85%,60%)]" },
+  { name: "Foundation", total: 12, color: "bg-primary" },
+  { name: "Core Programming", total: 18, color: "bg-accent" },
+  { name: "ML & AI", total: 15, color: "bg-[hsl(330,85%,60%)]" },
 ];
 
 export default function Dashboard() {
+  const { user, loading: authLoading } = useAuth();
+  const { progress, profile, loading: progressLoading } = useProgress();
+
+  // Redirect to login if not authenticated
+  if (!authLoading && !user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const loading = authLoading || progressLoading;
+
+  const displayName = profile?.display_name || user?.email?.split("@")[0] || "Learner";
+  const completedLessons = progress?.completed_lessons || [];
+  const xpPoints = progress?.xp_points || 0;
+  const currentStreak = progress?.current_streak || 0;
+
+  // Calculate track-specific progress
+  const calculateTrackProgress = (trackPrefix: string, total: number) => {
+    const completed = completedLessons.filter((l) => l.startsWith(trackPrefix)).length;
+    return {
+      completed,
+      progress: total > 0 ? Math.round((completed / total) * 100) : 0,
+    };
+  };
+
+  const foundationProgress = calculateTrackProgress("foundation", 12);
+  const coreProgress = calculateTrackProgress("core", 18);
+  const mlProgress = calculateTrackProgress("ml-ai", 15);
+
+  const stats = [
+    { label: "Lessons Completed", value: completedLessons.length, icon: BookOpen, color: "text-primary" },
+    { label: "Current Streak", value: currentStreak, icon: Flame, color: "text-warning" },
+    { label: "Total XP", value: xpPoints, icon: Zap, color: "text-accent" },
+    { label: "Achievements", value: 0, icon: Trophy, color: "text-success" },
+  ];
+
+  const trackProgressData = [
+    { ...trackProgress[0], ...foundationProgress },
+    { ...trackProgress[1], ...coreProgress },
+    { ...trackProgress[2], ...mlProgress },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="pt-24 pb-16 flex items-center justify-center min-h-[60vh]">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-muted-foreground">Loading your progress...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -60,10 +95,12 @@ export default function Dashboard() {
             className="mb-8"
           >
             <h1 className="font-display text-4xl font-bold mb-2">
-              Welcome back, <span className="gradient-text">Learner</span>
+              Welcome back, <span className="gradient-text">{displayName}</span>
             </h1>
             <p className="text-muted-foreground">
-              Keep up the great work! You're on a 5-day streak.
+              {currentStreak > 0
+                ? `Keep up the great work! You're on a ${currentStreak}-day streak.`
+                : "Start learning today to build your streak!"}
             </p>
           </motion.div>
 
@@ -142,53 +179,6 @@ export default function Dashboard() {
                 </div>
               </motion.div>
 
-              {/* Weekly Progress */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="glass-card rounded-xl p-6"
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="font-display text-xl font-bold">Weekly Activity</h2>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    This Week
-                  </div>
-                </div>
-
-                <div className="flex items-end justify-between gap-2 h-32">
-                  {weeklyProgress.map((day) => (
-                    <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
-                      <div className="w-full flex flex-col items-center">
-                        <div
-                          className={`w-full max-w-[40px] rounded-t-md ${
-                            day.lessons > 0 ? "bg-primary" : "bg-secondary"
-                          }`}
-                          style={{ height: `${Math.max(day.lessons * 25, 8)}px` }}
-                        />
-                      </div>
-                      <span className="text-xs text-muted-foreground">{day.day}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-border/50">
-                  <div className="text-center">
-                    <div className="font-display text-2xl font-bold">9</div>
-                    <div className="text-xs text-muted-foreground">Lessons this week</div>
-                  </div>
-                  <div className="h-10 w-px bg-border" />
-                  <div className="text-center">
-                    <div className="font-display text-2xl font-bold text-success flex items-center gap-1">
-                      <TrendingUp className="h-5 w-5" />
-                      +45%
-                    </div>
-                    <div className="text-xs text-muted-foreground">vs last week</div>
-                  </div>
-                </div>
-              </motion.div>
-
               {/* Track Progress */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -198,7 +188,7 @@ export default function Dashboard() {
               >
                 <h2 className="font-display text-xl font-bold mb-6">Track Progress</h2>
                 <div className="space-y-5">
-                  {trackProgress.map((track) => (
+                  {trackProgressData.map((track) => (
                     <div key={track.name}>
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium">{track.name}</span>
@@ -220,39 +210,6 @@ export default function Dashboard() {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Recent Activity */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="glass-card rounded-xl p-6"
-              >
-                <h2 className="font-display text-lg font-bold mb-4">Recent Activity</h2>
-                <div className="space-y-4">
-                  {recentActivity.map((activity, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className={`mt-1 p-1.5 rounded-lg ${activity.completed ? "bg-success/10" : "bg-warning/10"}`}>
-                        {activity.completed ? (
-                          <Star className="h-4 w-4 text-success" />
-                        ) : (
-                          <Target className="h-4 w-4 text-warning" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{activity.title}</p>
-                        <p className="text-xs text-muted-foreground">{activity.track}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-muted-foreground">{activity.time}</span>
-                          {activity.xp > 0 && (
-                            <span className="text-xs text-primary">+{activity.xp} XP</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
               {/* Daily Goal */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -277,7 +234,7 @@ export default function Dashboard() {
                         className="text-primary"
                         strokeWidth="8"
                         strokeDasharray={352}
-                        strokeDashoffset={352 * (1 - 0.6)}
+                        strokeDashoffset={352 * (1 - Math.min(completedLessons.length / 3, 1))}
                         strokeLinecap="round"
                         stroke="currentColor"
                         fill="transparent"
@@ -288,12 +245,18 @@ export default function Dashboard() {
                       />
                     </svg>
                     <div className="absolute">
-                      <div className="font-display text-2xl font-bold">60%</div>
-                      <div className="text-xs text-muted-foreground">2/3 lessons</div>
+                      <div className="font-display text-2xl font-bold">
+                        {Math.min(Math.round((completedLessons.length / 3) * 100), 100)}%
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {Math.min(completedLessons.length, 3)}/3 lessons
+                      </div>
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground mt-4">
-                    Complete 1 more lesson to reach your daily goal!
+                    {completedLessons.length >= 3
+                      ? "Daily goal achieved! 🎉"
+                      : `Complete ${3 - Math.min(completedLessons.length, 3)} more lesson${3 - completedLessons.length !== 1 ? "s" : ""} to reach your daily goal!`}
                   </p>
                 </div>
               </motion.div>
@@ -307,18 +270,18 @@ export default function Dashboard() {
               >
                 <h2 className="font-display text-lg font-bold mb-4">Quick Practice</h2>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start gap-2">
-                    <Zap className="h-4 w-4 text-warning" />
-                    Daily Challenge
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start gap-2">
-                    <Target className="h-4 w-4 text-primary" />
-                    Review Weak Areas
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start gap-2">
-                    <BookOpen className="h-4 w-4 text-accent" />
-                    Random Topic
-                  </Button>
+                  <Link to="/curriculum">
+                    <Button variant="outline" className="w-full justify-start gap-2">
+                      <Zap className="h-4 w-4 text-warning" />
+                      Browse Curriculum
+                    </Button>
+                  </Link>
+                  <Link to="/achievements">
+                    <Button variant="outline" className="w-full justify-start gap-2">
+                      <Trophy className="h-4 w-4 text-accent" />
+                      View Achievements
+                    </Button>
+                  </Link>
                 </div>
               </motion.div>
             </div>

@@ -17,6 +17,7 @@ import {
   Star
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useProgress } from "@/hooks/useProgress";
 
 const tracks = [
   {
@@ -173,6 +174,16 @@ const tracks = [
 ];
 
 export default function Curriculum() {
+  const { isLessonCompleted, progress } = useProgress();
+
+  // Calculate module progress based on completed lessons
+  const getModuleProgress = (trackId: string, moduleId: string, lessons: typeof tracks[0]["modules"][0]["lessons"]) => {
+    const completedCount = lessons.filter((lesson) =>
+      isLessonCompleted(`${trackId}/${moduleId}/${lesson.id}`)
+    ).length;
+    return Math.round((completedCount / lessons.length) * 100);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -225,47 +236,55 @@ export default function Curriculum() {
 
                 {/* Modules */}
                 <div className="divide-y divide-border/50">
-                  {track.modules.map((module, moduleIndex) => (
-                    <div key={module.id} className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-display font-semibold text-lg">{module.title}</h3>
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm text-muted-foreground">
-                            {module.progress}% complete
-                          </span>
-                          <Progress value={module.progress} className="w-24 h-2" />
+                  {track.modules.map((module, moduleIndex) => {
+                    const moduleProgress = getModuleProgress(track.id, module.id, module.lessons);
+                    return (
+                      <div key={module.id} className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-display font-semibold text-lg">{module.title}</h3>
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm text-muted-foreground">
+                              {moduleProgress}% complete
+                            </span>
+                            <Progress value={moduleProgress} className="w-24 h-2" />
+                          </div>
+                        </div>
+
+                        <div className="grid gap-2">
+                          {module.lessons.map((lesson) => {
+                            const lessonId = `${track.id}/${module.id}/${lesson.id}`;
+                            const completed = isLessonCompleted(lessonId);
+                            
+                            return (
+                              <Link
+                                key={lesson.id}
+                                to={`/lesson/${track.id}/${module.id}/${lesson.id}`}
+                                className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary/50 transition-colors group"
+                              >
+                                <div className="flex items-center gap-3">
+                                  {completed ? (
+                                    <CheckCircle2 className="h-5 w-5 text-success" />
+                                  ) : (
+                                    <div className="h-5 w-5 rounded-full border-2 border-muted-foreground/30" />
+                                  )}
+                                  <span className={completed ? "text-muted-foreground" : ""}>
+                                    {lesson.title}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                                    <Clock className="h-4 w-4" />
+                                    {lesson.duration}
+                                  </span>
+                                  <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                </div>
+                              </Link>
+                            );
+                          })}
                         </div>
                       </div>
-
-                      <div className="grid gap-2">
-                        {module.lessons.map((lesson) => (
-                          <Link
-                            key={lesson.id}
-                            to={`/lesson/${track.id}/${module.id}/${lesson.id}`}
-                            className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary/50 transition-colors group"
-                          >
-                            <div className="flex items-center gap-3">
-                              {lesson.completed ? (
-                                <CheckCircle2 className="h-5 w-5 text-success" />
-                              ) : (
-                                <div className="h-5 w-5 rounded-full border-2 border-muted-foreground/30" />
-                              )}
-                              <span className={lesson.completed ? "text-muted-foreground" : ""}>
-                                {lesson.title}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className="text-sm text-muted-foreground flex items-center gap-1">
-                                <Clock className="h-4 w-4" />
-                                {lesson.duration}
-                              </span>
-                              <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </motion.div>
             ))}

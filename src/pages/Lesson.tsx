@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,8 +16,11 @@ import {
   Code,
   Lightbulb,
   Play,
-  Target
+  Target,
+  Loader2
 } from "lucide-react";
+import { useProgress } from "@/hooks/useProgress";
+import { useAuth } from "@/hooks/useAuth";
 
 // Math rendering component
 function MathBlock({ math, display = false }: { math: string; display?: boolean }) {
@@ -39,6 +42,7 @@ function MathBlock({ math, display = false }: { math: string; display?: boolean 
 const lessonContent = {
   title: "Introduction to Binary",
   duration: "15 min",
+  xpReward: 100,
   objectives: [
     "Understand what binary number system is",
     "Convert between binary and decimal",
@@ -123,10 +127,18 @@ Sum: 0 + 2 + 0 + 8 + 16 = 26`,
 
 export default function Lesson() {
   const { trackId, moduleId, lessonId } = useParams();
+  const navigate = useNavigate();
   const [currentSection, setCurrentSection] = useState(0);
   const [showPractice, setShowPractice] = useState(false);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
+  const [isCompleting, setIsCompleting] = useState(false);
+
+  const { user } = useAuth();
+  const { completeLesson, isLessonCompleted } = useProgress();
+
+  const fullLessonId = `${trackId}/${moduleId}/${lessonId}`;
+  const alreadyCompleted = isLessonCompleted(fullLessonId);
 
   const progress = ((currentSection + 1) / lessonContent.sections.length) * 100;
 
@@ -134,8 +146,25 @@ export default function Lesson() {
     setAnswers({ ...answers, [questionId]: optionIndex });
   };
 
-  const checkAnswers = () => {
+  const checkAnswers = async () => {
     setShowResults(true);
+    
+    // Only track completion if user is logged in and hasn't completed this lesson
+    if (user && !alreadyCompleted) {
+      const correctAnswers = lessonContent.practices.filter(
+        (q) => answers[q.id] === q.correct
+      ).length;
+      const totalQuestions = lessonContent.practices.length;
+      
+      // Award XP based on performance (minimum 50 XP for completing)
+      const baseXP = lessonContent.xpReward;
+      const bonusMultiplier = correctAnswers / totalQuestions;
+      const earnedXP = Math.round(baseXP * (0.5 + 0.5 * bonusMultiplier));
+      
+      setIsCompleting(true);
+      await completeLesson(fullLessonId, earnedXP);
+      setIsCompleting(false);
+    }
   };
 
   return (
@@ -354,9 +383,16 @@ export default function Lesson() {
                     variant="hero"
                     size="lg"
                     onClick={checkAnswers}
-                    disabled={Object.keys(answers).length !== lessonContent.practices.length}
+                    disabled={Object.keys(answers).length !== lessonContent.practices.length || isCompleting}
                   >
-                    Check Answers
+                    {isCompleting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Saving Progress...
+                      </>
+                    ) : (
+                      "Check Answers"
+                    )}
                   </Button>
                 ) : (
                   <div className="text-center">
@@ -366,6 +402,12 @@ export default function Lesson() {
                       </span>
                       <span className="text-muted-foreground"> / {lessonContent.practices.length} correct</span>
                     </div>
+                    {alreadyCompleted && (
+                      <p className="text-sm text-success mb-4 flex items-center justify-center gap-1">
+                        <CheckCircle2 className="h-4 w-4" />
+                        Lesson already completed
+                      </p>
+                    )}
                     <Link to="/curriculum">
                       <Button variant="hero" size="lg">
                         Continue Learning
