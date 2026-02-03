@@ -17,10 +17,12 @@ import {
   Lightbulb,
   Play,
   Target,
-  Loader2
+  Loader2,
+  AlertCircle
 } from "lucide-react";
 import { useProgress } from "@/hooks/useProgress";
 import { useAuth } from "@/hooks/useAuth";
+import { getLessonById, allLessons, type LessonContent } from "@/data/lessons";
 
 // Math rendering component
 function MathBlock({ math, display = false }: { math: string; display?: boolean }) {
@@ -38,93 +40,6 @@ function MathBlock({ math, display = false }: { math: string; display?: boolean 
   return <span ref={ref} />;
 }
 
-// Sample lesson content
-const lessonContent = {
-  title: "Introduction to Binary",
-  duration: "15 min",
-  xpReward: 100,
-  objectives: [
-    "Understand what binary number system is",
-    "Convert between binary and decimal",
-    "Understand why computers use binary",
-  ],
-  sections: [
-    {
-      type: "text",
-      content: `Binary is a base-2 number system that uses only two digits: 0 and 1. It's the fundamental language that all computers speak, representing data and instructions at the most basic level.`,
-    },
-    {
-      type: "concept",
-      title: "Why Binary?",
-      content: `Computers use binary because electronic circuits have two stable states: on (1) and off (0). This makes binary the most reliable and efficient way to store and process information electronically.`,
-    },
-    {
-      type: "math",
-      title: "Binary to Decimal Conversion",
-      content: `Each position in a binary number represents a power of 2. To convert binary to decimal, multiply each digit by its position value and sum the results.`,
-      formula: "1011_2 = 1 \\times 2^3 + 0 \\times 2^2 + 1 \\times 2^1 + 1 \\times 2^0 = 8 + 0 + 2 + 1 = 11_{10}",
-    },
-    {
-      type: "code",
-      title: "Binary Conversion in Python",
-      language: "python",
-      code: `# Convert decimal to binary
-decimal_num = 11
-binary_str = bin(decimal_num)  # Returns '0b1011'
-print(f"{decimal_num} in binary is {binary_str[2:]}")
-
-# Convert binary to decimal
-binary_str = "1011"
-decimal_num = int(binary_str, 2)  # Returns 11
-print(f"Binary 1011 is {decimal_num} in decimal")
-
-# Manual conversion function
-def decimal_to_binary(n):
-    if n == 0:
-        return "0"
-    binary = ""
-    while n > 0:
-        binary = str(n % 2) + binary
-        n //= 2
-    return binary`,
-    },
-    {
-      type: "example",
-      title: "Worked Example",
-      problem: "Convert the binary number 11010 to decimal.",
-      solution: `Starting from the rightmost digit:
-• Position 0: 0 × 2⁰ = 0
-• Position 1: 1 × 2¹ = 2  
-• Position 2: 0 × 2² = 0
-• Position 3: 1 × 2³ = 8
-• Position 4: 1 × 2⁴ = 16
-
-Sum: 0 + 2 + 0 + 8 + 16 = 26`,
-      formula: "11010_2 = 26_{10}",
-    },
-  ],
-  practices: [
-    {
-      id: 1,
-      question: "What is 1100 in decimal?",
-      options: ["10", "12", "14", "16"],
-      correct: 1,
-    },
-    {
-      id: 2,
-      question: "What is 13 in binary?",
-      options: ["1011", "1100", "1101", "1110"],
-      correct: 2,
-    },
-    {
-      id: 3,
-      question: "How many bits are needed to represent the number 64?",
-      options: ["5", "6", "7", "8"],
-      correct: 2,
-    },
-  ],
-};
-
 export default function Lesson() {
   const { trackId, moduleId, lessonId } = useParams();
   const navigate = useNavigate();
@@ -138,7 +53,42 @@ export default function Lesson() {
   const { completeLesson, isLessonCompleted } = useProgress();
 
   const fullLessonId = `${trackId}/${moduleId}/${lessonId}`;
+  const lessonContent = getLessonById(fullLessonId);
   const alreadyCompleted = isLessonCompleted(fullLessonId);
+
+  // Get track title for badge
+  const lessonMeta = allLessons.find(l => l.id === fullLessonId);
+  const trackTitle = lessonMeta?.trackTitle || "Foundation";
+
+  // If lesson not found, show error state
+  if (!lessonContent) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="pt-24 pb-16">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-16"
+            >
+              <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h1 className="font-display text-2xl font-bold mb-2">Lesson Not Found</h1>
+              <p className="text-muted-foreground mb-6">
+                This lesson is not available yet or doesn't exist.
+              </p>
+              <Link to="/curriculum">
+                <Button variant="hero">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Curriculum
+                </Button>
+              </Link>
+            </motion.div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   const progress = ((currentSection + 1) / lessonContent.sections.length) * 100;
 
@@ -192,7 +142,7 @@ export default function Lesson() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <Badge variant="outline" className="text-primary">Foundation</Badge>
+                  <Badge variant="outline" className="text-primary">{trackTitle}</Badge>
                   <span className="text-sm text-muted-foreground flex items-center gap-1">
                     <Clock className="h-4 w-4" />
                     {lessonContent.duration}
