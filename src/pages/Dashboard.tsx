@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useProgress } from "@/hooks/useProgress";
 import { useAuth } from "@/hooks/useAuth";
+import { getNextLesson } from "@/data/lessons";
 
 const trackProgress = [
   { name: "Foundation", total: 12, color: "bg-primary" },
@@ -144,39 +145,62 @@ export default function Dashboard() {
                   </Link>
                 </div>
 
-                <div className="p-5 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20">
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <div>
-                      <Badge variant="outline" className="text-primary mb-2">
-                        Foundation Track
-                      </Badge>
-                      <h3 className="font-display text-lg font-semibold">
-                        Hexadecimal & Octal Systems
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Learn about base-16 and base-8 number systems
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground mb-1">
-                        <Clock className="h-4 w-4" />
-                        18 min
+                {(() => {
+                  const nextLesson = getNextLesson(completedLessons);
+                  if (!nextLesson) {
+                    return (
+                      <div className="p-5 rounded-xl bg-gradient-to-br from-success/10 to-accent/10 border border-success/20 text-center">
+                        <Trophy className="h-12 w-12 text-success mx-auto mb-3" />
+                        <h3 className="font-display text-lg font-semibold mb-2">
+                          All Lessons Completed!
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Congratulations! You've completed all available lessons.
+                        </p>
+                        <Link to="/curriculum">
+                          <Button variant="outline">
+                            Review Curriculum
+                          </Button>
+                        </Link>
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        +100 XP
+                    );
+                  }
+                  return (
+                    <div className="p-5 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20">
+                      <div className="flex items-start justify-between gap-4 mb-4">
+                        <div>
+                          <Badge variant="outline" className="text-primary mb-2">
+                            {nextLesson.trackTitle} Track
+                          </Badge>
+                          <h3 className="font-display text-lg font-semibold">
+                            {nextLesson.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Continue your learning journey
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-center gap-1 text-sm text-muted-foreground mb-1">
+                            <Clock className="h-4 w-4" />
+                            {nextLesson.duration}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            +100 XP
+                          </div>
+                        </div>
                       </div>
+                      
+                      <Progress value={0} className="h-2 mb-4" />
+                      
+                      <Link to={`/lesson/${nextLesson.id}`}>
+                        <Button variant="hero" className="w-full">
+                          Continue Lesson
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </Button>
+                      </Link>
                     </div>
-                  </div>
-                  
-                  <Progress value={0} className="h-2 mb-4" />
-                  
-                  <Link to="/lesson/foundation/number-systems/hexadecimal">
-                    <Button variant="hero" className="w-full">
-                      Continue Lesson
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
-                </div>
+                  );
+                })()}
               </motion.div>
 
               {/* Track Progress */}
