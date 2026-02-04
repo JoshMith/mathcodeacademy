@@ -17,15 +17,21 @@ import {
   TrendingUp,
   Calendar,
   Loader2,
+  CheckCircle2,
+  Circle,
 } from "lucide-react";
 import { useProgress } from "@/hooks/useProgress";
 import { useAuth } from "@/hooks/useAuth";
-import { getNextLesson } from "@/data/lessons";
+import { getNextLesson, allLessons } from "@/data/lessons";
 
 const trackProgress = [
-  { name: "Foundation", total: 12, color: "bg-primary" },
-  { name: "Core Programming", total: 18, color: "bg-accent" },
-  { name: "ML & AI", total: 15, color: "bg-[hsl(330,85%,60%)]" },
+  { name: "Foundation", total: 11, prefix: "foundation", color: "bg-primary" },
+  { name: "Core Programming", total: 12, prefix: "core", color: "bg-accent" },
+  { name: "ML & AI", total: 12, prefix: "ml-ai", color: "bg-[hsl(330,85%,60%)]" },
+  { name: "Algorithms", total: 12, prefix: "algorithms", color: "bg-success" },
+  { name: "Networking", total: 8, prefix: "networking", color: "bg-warning" },
+  { name: "Cybersecurity", total: 8, prefix: "cybersecurity", color: "bg-destructive" },
+  { name: "System Architecture", total: 8, prefix: "systems", color: "bg-[hsl(280,85%,60%)]" },
 ];
 
 export default function Dashboard() {
@@ -46,16 +52,14 @@ export default function Dashboard() {
 
   // Calculate track-specific progress
   const calculateTrackProgress = (trackPrefix: string, total: number) => {
+    const trackLessons = allLessons.filter((l) => l.trackId === trackPrefix);
     const completed = completedLessons.filter((l) => l.startsWith(trackPrefix)).length;
     return {
       completed,
       progress: total > 0 ? Math.round((completed / total) * 100) : 0,
+      lessons: trackLessons,
     };
   };
-
-  const foundationProgress = calculateTrackProgress("foundation", 12);
-  const coreProgress = calculateTrackProgress("core", 18);
-  const mlProgress = calculateTrackProgress("ml-ai", 15);
 
   const stats = [
     { label: "Lessons Completed", value: completedLessons.length, icon: BookOpen, color: "text-primary" },
@@ -64,11 +68,10 @@ export default function Dashboard() {
     { label: "Achievements", value: 0, icon: Trophy, color: "text-success" },
   ];
 
-  const trackProgressData = [
-    { ...trackProgress[0], ...foundationProgress },
-    { ...trackProgress[1], ...coreProgress },
-    { ...trackProgress[2], ...mlProgress },
-  ];
+  const trackProgressData = trackProgress.map((track) => ({
+    ...track,
+    ...calculateTrackProgress(track.prefix, track.total),
+  }));
 
   if (loading) {
     return (
@@ -211,7 +214,7 @@ export default function Dashboard() {
                 className="glass-card rounded-xl p-6"
               >
                 <h2 className="font-display text-xl font-bold mb-6">Track Progress</h2>
-                <div className="space-y-5">
+                <div className="space-y-6">
                   {trackProgressData.map((track) => (
                     <div key={track.name}>
                       <div className="flex items-center justify-between mb-2">
@@ -220,11 +223,34 @@ export default function Dashboard() {
                           {track.completed}/{track.total} lessons
                         </span>
                       </div>
-                      <div className="h-3 rounded-full bg-secondary overflow-hidden">
+                      <div className="h-3 rounded-full bg-secondary overflow-hidden mb-3">
                         <div
                           className={`h-full rounded-full ${track.color} transition-all duration-500`}
                           style={{ width: `${track.progress}%` }}
                         />
+                      </div>
+                      {/* Lesson checkmarks */}
+                      <div className="flex flex-wrap gap-2">
+                        {track.lessons.map((lesson) => {
+                          const isCompleted = completedLessons.includes(lesson.id);
+                          return (
+                            <Link
+                              key={lesson.id}
+                              to={`/lesson/${lesson.id}`}
+                              className="group flex items-center gap-1.5 text-xs hover:text-primary transition-colors"
+                              title={lesson.title}
+                            >
+                              {isCompleted ? (
+                                <CheckCircle2 className="h-4 w-4 text-success" />
+                              ) : (
+                                <Circle className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                              )}
+                              <span className={`truncate max-w-[100px] ${isCompleted ? "text-success" : "text-muted-foreground group-hover:text-foreground"}`}>
+                                {lesson.title}
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}

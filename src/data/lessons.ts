@@ -37,7 +37,11 @@ export interface LessonMetadata {
 
 // All lessons with their full lesson path as key
 export const lessonsData: Record<string, LessonContent> = {
-  // Foundation Track - Number Systems
+  // =========================================
+  // FOUNDATION TRACK
+  // =========================================
+  
+  // Foundation - Number Systems
   "foundation/number-systems/binary-intro": {
     title: "Introduction to Binary",
     duration: "15 min",
@@ -216,65 +220,7 @@ Therefore: 11010110₂ = D6₁₆`,
     ],
   },
 
-  "foundation/number-systems/floating-point": {
-    title: "Floating Point Representation",
-    duration: "25 min",
-    xpReward: 130,
-    objectives: [
-      "Understand IEEE 754 floating point format",
-      "Recognize precision limitations in floating point",
-      "Avoid common floating point errors in code",
-    ],
-    sections: [
-      {
-        type: "text",
-        content: `Floating point numbers represent real numbers in computers using scientific notation. The IEEE 754 standard defines how these numbers are stored, with separate fields for sign, exponent, and mantissa.`,
-      },
-      {
-        type: "concept",
-        title: "IEEE 754 Structure",
-        content: `A 32-bit float has: 1 sign bit (0=positive), 8 exponent bits (biased by 127), and 23 mantissa bits (the fractional part after 1.). This allows representing very large and very small numbers.`,
-      },
-      {
-        type: "math",
-        title: "Floating Point Formula",
-        content: `The value is calculated as:`,
-        formula: "(-1)^{sign} \\times 1.mantissa \\times 2^{exponent - 127}",
-      },
-      {
-        type: "concept",
-        title: "Precision Problems",
-        content: `Not all decimal numbers can be exactly represented in binary floating point. For example, 0.1 in decimal is a repeating fraction in binary, leading to small errors that can accumulate.`,
-      },
-      {
-        type: "code",
-        title: "Floating Point Gotchas",
-        language: "python",
-        code: `# Classic floating point issue
-print(0.1 + 0.2)  # 0.30000000000000004, not 0.3!
-
-# Comparing floats safely
-import math
-a = 0.1 + 0.2
-b = 0.3
-print(math.isclose(a, b))  # True
-
-# For financial calculations, use Decimal
-from decimal import Decimal
-price = Decimal('19.99')
-tax = Decimal('0.08')
-total = price * (1 + tax)
-print(total)  # 21.5892`,
-      },
-    ],
-    practices: [
-      { id: 1, question: "How many bits is the sign field in IEEE 754 single precision?", options: ["1", "8", "23", "32"], correct: 0 },
-      { id: 2, question: "Why is 0.1 + 0.2 not exactly 0.3 in floating point?", options: ["Rounding error", "Binary representation", "Integer overflow", "Type coercion"], correct: 1 },
-      { id: 3, question: "What's the bias for single precision exponent?", options: ["63", "127", "255", "1023"], correct: 1 },
-    ],
-  },
-
-  // Foundation Track - Boolean Algebra
+  // Foundation - Boolean Algebra
   "foundation/boolean-algebra/logic-gates": {
     title: "Logic Gates Fundamentals",
     duration: "20 min",
@@ -409,55 +355,7 @@ def check_valid(x, y):
     ],
   },
 
-  "foundation/boolean-algebra/circuit-design": {
-    title: "Digital Circuit Design",
-    duration: "30 min",
-    xpReward: 150,
-    objectives: [
-      "Design circuits from boolean expressions",
-      "Minimize gates using Karnaugh maps",
-      "Build practical circuits like adders",
-    ],
-    sections: [
-      {
-        type: "text",
-        content: `Digital circuit design combines boolean algebra with practical engineering. The goal is to implement a desired function using the minimum number of logic gates, reducing cost and power consumption.`,
-      },
-      {
-        type: "concept",
-        title: "Half Adder",
-        content: `A half adder adds two 1-bit numbers. It needs two outputs: Sum (XOR of inputs) and Carry (AND of inputs). This is the building block for larger adders.`,
-      },
-      {
-        type: "math",
-        title: "Half Adder Equations",
-        content: `For inputs A and B:`,
-        formula: "Sum = A \\oplus B \\quad Carry = A \\cdot B",
-      },
-      {
-        type: "code",
-        title: "Simulating a Half Adder",
-        language: "python",
-        code: `def half_adder(a, b):
-    sum_bit = a ^ b  # XOR
-    carry = a & b    # AND
-    return sum_bit, carry
-
-# Test all inputs
-for a in [0, 1]:
-    for b in [0, 1]:
-        s, c = half_adder(a, b)
-        print(f"{a} + {b} = {c}{s}")  # carry,sum`,
-      },
-    ],
-    practices: [
-      { id: 1, question: "What gate produces the 'sum' in a half adder?", options: ["AND", "OR", "XOR", "NAND"], correct: 2 },
-      { id: 2, question: "How many outputs does a full adder have?", options: ["1", "2", "3", "4"], correct: 1 },
-      { id: 3, question: "A Karnaugh map helps with what?", options: ["Adding numbers", "Simplifying expressions", "Memory storage", "Timing circuits"], correct: 1 },
-    ],
-  },
-
-  // Foundation Track - Set Theory
+  // Foundation - Set Theory
   "foundation/set-theory/sets-intro": {
     title: "Introduction to Sets",
     duration: "15 min",
@@ -574,6 +472,1930 @@ print(a ^ b)  # Symmetric diff: {1, 2, 5, 6}`,
       { id: 3, question: "A bijective function is both:", options: ["Reflexive and transitive", "Injective and surjective", "Commutative and associative", "Linear and continuous"], correct: 1 },
     ],
   },
+
+  // =========================================
+  // CORE PROGRAMMING TRACK
+  // =========================================
+
+  // Core Programming - Linear Algebra
+  "core/linear-algebra/vectors-intro": {
+    title: "Introduction to Vectors",
+    duration: "20 min",
+    xpReward: 100,
+    objectives: [
+      "Understand vectors as ordered lists of numbers",
+      "Perform vector addition and scalar multiplication",
+      "Calculate vector magnitude and direction",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Vectors are the building blocks of modern computing, from graphics to machine learning. A vector is simply an ordered list of numbers that can represent points, directions, or features in multi-dimensional space.`,
+      },
+      {
+        type: "math",
+        title: "Vector Notation",
+        content: `A vector in n-dimensional space:`,
+        formula: "\\vec{v} = \\begin{bmatrix} v_1 \\\\ v_2 \\\\ \\vdots \\\\ v_n \\end{bmatrix} \\quad |\\vec{v}| = \\sqrt{v_1^2 + v_2^2 + ... + v_n^2}",
+      },
+      {
+        type: "code",
+        title: "Vectors in NumPy",
+        language: "python",
+        code: `import numpy as np
+
+# Create vectors
+v = np.array([3, 4])
+w = np.array([1, 2])
+
+# Vector operations
+print(v + w)        # Addition: [4, 6]
+print(2 * v)        # Scalar mult: [6, 8]
+print(np.linalg.norm(v))  # Magnitude: 5.0`,
+      },
+      {
+        type: "concept",
+        title: "Applications",
+        content: `Vectors are everywhere: image pixels as color vectors, word embeddings in NLP, feature vectors in ML, and position/velocity in game physics.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "What is the magnitude of vector [3, 4]?", options: ["7", "5", "12", "25"], correct: 1 },
+      { id: 2, question: "[1,2] + [3,4] equals:", options: ["[4,6]", "[3,8]", "[2,6]", "[1,8]"], correct: 0 },
+      { id: 3, question: "How many dimensions does [1,2,3,4] have?", options: ["1", "2", "3", "4"], correct: 3 },
+    ],
+  },
+
+  "core/linear-algebra/matrices-intro": {
+    title: "Introduction to Matrices",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand matrices as 2D arrays of numbers",
+      "Perform matrix addition and scalar multiplication",
+      "Apply matrix transposition",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Matrices are rectangular grids of numbers that form the backbone of computer graphics, neural networks, and data transformations. They organize data in rows and columns for efficient computation.`,
+      },
+      {
+        type: "math",
+        title: "Matrix Notation",
+        content: `An m×n matrix has m rows and n columns:`,
+        formula: "A = \\begin{bmatrix} a_{11} & a_{12} \\\\ a_{21} & a_{22} \\end{bmatrix} \\quad A^T = \\begin{bmatrix} a_{11} & a_{21} \\\\ a_{12} & a_{22} \\end{bmatrix}",
+      },
+      {
+        type: "code",
+        title: "Matrices in NumPy",
+        language: "python",
+        code: `import numpy as np
+
+# Create a matrix
+A = np.array([[1, 2], [3, 4]])
+
+# Operations
+print(A + A)      # Element-wise addition
+print(3 * A)      # Scalar multiplication
+print(A.T)        # Transpose
+print(A.shape)    # (2, 2)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "A 3x4 matrix has how many elements?", options: ["7", "12", "16", "34"], correct: 1 },
+      { id: 2, question: "What does transposing a matrix do?", options: ["Inverts it", "Swaps rows and columns", "Doubles it", "Negates it"], correct: 1 },
+      { id: 3, question: "What's the identity matrix?", options: ["All zeros", "All ones", "1s on diagonal, 0s elsewhere", "Random values"], correct: 2 },
+    ],
+  },
+
+  "core/linear-algebra/matrix-multiplication": {
+    title: "Matrix Multiplication",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Understand dot product of vectors",
+      "Perform matrix-vector multiplication",
+      "Master matrix-matrix multiplication",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Matrix multiplication is the core operation in deep learning, transforming data through neural network layers. Understanding it deeply is essential for any ML practitioner.`,
+      },
+      {
+        type: "math",
+        title: "Dot Product",
+        content: `The dot product of two vectors:`,
+        formula: "\\vec{a} \\cdot \\vec{b} = a_1b_1 + a_2b_2 + ... + a_nb_n = |\\vec{a}||\\vec{b}|\\cos\\theta",
+      },
+      {
+        type: "concept",
+        title: "Matrix Multiplication Rule",
+        content: `For A(m×n) × B(n×p) = C(m×p), each element C[i,j] is the dot product of row i of A with column j of B. The inner dimensions must match!`,
+      },
+      {
+        type: "code",
+        title: "Matrix Multiplication in NumPy",
+        language: "python",
+        code: `import numpy as np
+
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+# Dot product
+v = np.array([1, 2])
+w = np.array([3, 4])
+print(np.dot(v, w))  # 11
+
+# Matrix multiplication
+print(A @ B)  # Or np.matmul(A, B)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "[1,2] · [3,4] equals:", options: ["7", "10", "11", "14"], correct: 2 },
+      { id: 2, question: "Can you multiply a 3x2 matrix by a 4x3 matrix?", options: ["Yes", "No", "Only sometimes", "Only with transpose"], correct: 1 },
+      { id: 3, question: "Result dimensions of 2x3 × 3x4 is:", options: ["2x4", "3x3", "2x3", "3x4"], correct: 0 },
+    ],
+  },
+
+  "core/linear-algebra/linear-transformations": {
+    title: "Linear Transformations",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Understand matrices as transformations",
+      "Apply rotation, scaling, and shearing matrices",
+      "Compose multiple transformations",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Matrices aren't just grids of numbers—they represent transformations of space. Every matrix can stretch, rotate, or shear vectors, which is the foundation of computer graphics.`,
+      },
+      {
+        type: "math",
+        title: "Common Transformations",
+        content: `2D rotation by angle θ:`,
+        formula: "R(\\theta) = \\begin{bmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{bmatrix}",
+      },
+      {
+        type: "code",
+        title: "Transformations in Practice",
+        language: "python",
+        code: `import numpy as np
+
+# Rotation matrix (90 degrees)
+theta = np.pi / 2
+R = np.array([
+    [np.cos(theta), -np.sin(theta)],
+    [np.sin(theta), np.cos(theta)]
+])
+
+# Scale matrix
+S = np.array([[2, 0], [0, 2]])  # 2x scale
+
+# Apply transformation
+point = np.array([1, 0])
+rotated = R @ point  # [0, 1]`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "A 2x scaling matrix has what on its diagonal?", options: ["0", "1", "2", "0.5"], correct: 2 },
+      { id: 2, question: "What does a rotation matrix preserve?", options: ["Size only", "Orientation only", "Both size and angles", "Neither"], correct: 2 },
+      { id: 3, question: "Order matters in matrix composition because:", options: ["Matrices are symmetric", "Multiplication is commutative", "Multiplication is NOT commutative", "They cancel out"], correct: 2 },
+    ],
+  },
+
+  // Core Programming - Calculus
+  "core/calculus/derivatives-intro": {
+    title: "Introduction to Derivatives",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand derivatives as rates of change",
+      "Apply basic derivative rules",
+      "Compute gradients of simple functions",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Derivatives measure how a function changes as its input changes. In machine learning, they're the engine of training—telling us how to adjust parameters to reduce error.`,
+      },
+      {
+        type: "math",
+        title: "Definition of Derivative",
+        content: `The derivative of f at point x:`,
+        formula: "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}",
+      },
+      {
+        type: "concept",
+        title: "Common Rules",
+        content: `Power rule: d/dx(xⁿ) = nxⁿ⁻¹. Chain rule: d/dx[f(g(x))] = f'(g(x))·g'(x). These rules let us differentiate complex functions.`,
+      },
+      {
+        type: "code",
+        title: "Derivatives with SymPy",
+        language: "python",
+        code: `from sympy import symbols, diff, sin, cos
+
+x = symbols('x')
+
+# Differentiate x^2
+print(diff(x**2, x))  # 2*x
+
+# Differentiate sin(x)
+print(diff(sin(x), x))  # cos(x)
+
+# Chain rule: sin(x^2)
+print(diff(sin(x**2), x))  # 2*x*cos(x^2)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "What is the derivative of x³?", options: ["x²", "3x²", "3x³", "x⁴/4"], correct: 1 },
+      { id: 2, question: "The derivative of a constant is:", options: ["1", "0", "The constant", "Undefined"], correct: 1 },
+      { id: 3, question: "Derivative of sin(x) is:", options: ["-cos(x)", "cos(x)", "-sin(x)", "tan(x)"], correct: 1 },
+    ],
+  },
+
+  "core/calculus/gradients": {
+    title: "Gradients & Partial Derivatives",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Compute partial derivatives",
+      "Understand the gradient vector",
+      "Apply gradients in optimization",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `When a function has multiple inputs, we need partial derivatives—derivatives with respect to one variable while holding others constant. The gradient combines all partial derivatives into a vector.`,
+      },
+      {
+        type: "math",
+        title: "The Gradient Vector",
+        content: `For f(x,y), the gradient points in the direction of steepest increase:`,
+        formula: "\\nabla f = \\begin{bmatrix} \\frac{\\partial f}{\\partial x} \\\\ \\frac{\\partial f}{\\partial y} \\end{bmatrix}",
+      },
+      {
+        type: "code",
+        title: "Computing Gradients",
+        language: "python",
+        code: `from sympy import symbols, diff
+
+x, y = symbols('x y')
+
+# f(x,y) = x^2 + xy + y^2
+f = x**2 + x*y + y**2
+
+# Partial derivatives
+df_dx = diff(f, x)  # 2*x + y
+df_dy = diff(f, y)  # x + 2*y
+
+print(f"∇f = [{df_dx}, {df_dy}]")`,
+      },
+      {
+        type: "concept",
+        title: "Why Gradients Matter",
+        content: `In machine learning, the gradient of the loss function tells us which direction to move our parameters to reduce error. This is the core of gradient descent!`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "For f(x,y) = xy, what is ∂f/∂x?", options: ["x", "y", "xy", "1"], correct: 1 },
+      { id: 2, question: "The gradient points in the direction of:", options: ["Minimum", "Maximum", "Steepest increase", "Steepest decrease"], correct: 2 },
+      { id: 3, question: "How many components in the gradient of f(x,y,z)?", options: ["1", "2", "3", "6"], correct: 2 },
+    ],
+  },
+
+  "core/calculus/chain-rule": {
+    title: "Chain Rule & Backpropagation",
+    duration: "35 min",
+    xpReward: 160,
+    objectives: [
+      "Master the chain rule for composed functions",
+      "Understand computational graphs",
+      "Connect chain rule to backpropagation",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `The chain rule is how derivatives flow through composed functions. In neural networks, backpropagation is just the chain rule applied systematically through layers.`,
+      },
+      {
+        type: "math",
+        title: "Chain Rule",
+        content: `For y = f(g(x)), the derivative is:`,
+        formula: "\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx} \\quad \\text{where } u = g(x)",
+      },
+      {
+        type: "concept",
+        title: "Computational Graphs",
+        content: `Neural networks are computational graphs where each node is an operation. Forward pass computes outputs; backward pass (backprop) computes gradients using the chain rule at each node.`,
+      },
+      {
+        type: "code",
+        title: "Backprop Example",
+        language: "python",
+        code: `# Simple computational graph: y = (x * w)^2
+# Forward pass
+x, w = 3.0, 2.0
+u = x * w       # u = 6
+y = u ** 2      # y = 36
+
+# Backward pass (chain rule)
+dy_du = 2 * u   # = 12
+du_dw = x       # = 3
+dy_dw = dy_du * du_dw  # = 36
+
+print(f"∂y/∂w = {dy_dw}")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "For f(g(x)) where f(u)=u² and g(x)=3x, f'(g(x)) is:", options: ["6x", "2(3x)", "6", "9x²"], correct: 1 },
+      { id: 2, question: "Backpropagation computes:", options: ["Predictions", "Gradients", "Activations", "Weights"], correct: 1 },
+      { id: 3, question: "In the chain rule, derivatives are:", options: ["Added", "Subtracted", "Multiplied", "Divided"], correct: 2 },
+    ],
+  },
+
+  "core/calculus/optimization": {
+    title: "Optimization & Gradient Descent",
+    duration: "30 min",
+    xpReward: 150,
+    objectives: [
+      "Understand local vs global minima",
+      "Implement gradient descent",
+      "Tune learning rate and momentum",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Optimization finds the best parameters for our model by minimizing a loss function. Gradient descent iteratively moves parameters in the direction opposite to the gradient.`,
+      },
+      {
+        type: "math",
+        title: "Gradient Descent Update",
+        content: `Update parameters θ using learning rate α:`,
+        formula: "\\theta_{new} = \\theta_{old} - \\alpha \\nabla L(\\theta)",
+      },
+      {
+        type: "code",
+        title: "Simple Gradient Descent",
+        language: "python",
+        code: `import numpy as np
+
+# Minimize f(x) = x^2
+def f(x): return x**2
+def grad(x): return 2*x
+
+x = 10.0  # Starting point
+lr = 0.1  # Learning rate
+
+for i in range(20):
+    x = x - lr * grad(x)
+    print(f"Step {i}: x = {x:.4f}, f(x) = {f(x):.4f}")`,
+      },
+      {
+        type: "concept",
+        title: "Learning Rate",
+        content: `Too high: overshoots minimum, diverges. Too low: slow convergence. Common techniques: learning rate schedules, Adam optimizer which adapts learning rate per parameter.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Gradient descent moves in what direction?", options: ["Same as gradient", "Opposite to gradient", "Perpendicular", "Random"], correct: 1 },
+      { id: 2, question: "What happens if learning rate is too high?", options: ["Faster convergence", "Oscillation/divergence", "No change", "Better accuracy"], correct: 1 },
+      { id: 3, question: "A local minimum is:", options: ["Always global minimum", "Lowest point nearby", "Highest point", "Saddle point"], correct: 1 },
+    ],
+  },
+
+  // Core Programming - Probability
+  "core/probability/probability-basics": {
+    title: "Probability Fundamentals",
+    duration: "20 min",
+    xpReward: 100,
+    objectives: [
+      "Understand probability axioms",
+      "Calculate conditional probabilities",
+      "Apply Bayes' theorem",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Probability quantifies uncertainty. In ML, everything is probabilistic—from predicting outcomes to understanding model confidence. It's the mathematical language of uncertainty.`,
+      },
+      {
+        type: "math",
+        title: "Probability Axioms",
+        content: `Basic rules:`,
+        formula: "0 \\leq P(A) \\leq 1 \\quad P(\\Omega) = 1 \\quad P(A \\cup B) = P(A) + P(B) - P(A \\cap B)",
+      },
+      {
+        type: "concept",
+        title: "Conditional Probability",
+        content: `P(A|B) is the probability of A given B has occurred. P(A|B) = P(A∩B)/P(B). This is fundamental for classification and inference.`,
+      },
+      {
+        type: "math",
+        title: "Bayes' Theorem",
+        content: `Inverting conditional probabilities:`,
+        formula: "P(A|B) = \\frac{P(B|A) \\cdot P(A)}{P(B)}",
+      },
+    ],
+    practices: [
+      { id: 1, question: "What's the probability of an impossible event?", options: ["0", "0.5", "1", "Undefined"], correct: 0 },
+      { id: 2, question: "P(A∪B) when A and B are mutually exclusive:", options: ["P(A)P(B)", "P(A)+P(B)", "P(A)-P(B)", "0"], correct: 1 },
+      { id: 3, question: "Bayes' theorem relates:", options: ["Two events", "Conditional probabilities", "Only prior probabilities", "Only posteriors"], correct: 1 },
+    ],
+  },
+
+  "core/probability/distributions": {
+    title: "Probability Distributions",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand discrete vs continuous distributions",
+      "Work with normal and uniform distributions",
+      "Calculate expected value and variance",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Distributions describe how probabilities are spread across outcomes. The normal distribution models natural phenomena; uniform gives equal probability to all outcomes.`,
+      },
+      {
+        type: "math",
+        title: "Normal Distribution",
+        content: `The bell curve defined by mean μ and standard deviation σ:`,
+        formula: "f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}",
+      },
+      {
+        type: "code",
+        title: "Working with Distributions",
+        language: "python",
+        code: `import numpy as np
+from scipy import stats
+
+# Normal distribution
+normal = stats.norm(loc=0, scale=1)  # μ=0, σ=1
+print(normal.pdf(0))    # Probability density at x=0
+print(normal.cdf(1.96)) # P(X < 1.96) ≈ 0.975
+
+# Sample from distribution
+samples = normal.rvs(size=1000)
+print(f"Mean: {np.mean(samples):.2f}")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "The normal distribution is defined by:", options: ["Just mean", "Just variance", "Mean and variance", "Mode only"], correct: 2 },
+      { id: 2, question: "In a uniform distribution, all outcomes are:", options: ["Certain", "Impossible", "Equally likely", "Normally distributed"], correct: 2 },
+      { id: 3, question: "68% of normal data falls within:", options: ["1σ", "2σ", "3σ", "0.5σ"], correct: 0 },
+    ],
+  },
+
+  "core/probability/statistical-inference": {
+    title: "Statistical Inference",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Understand sampling and estimation",
+      "Construct confidence intervals",
+      "Perform hypothesis testing",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Statistical inference draws conclusions about populations from samples. This is how we validate ML models—are the observed improvements real or just random chance?`,
+      },
+      {
+        type: "concept",
+        title: "Confidence Intervals",
+        content: `A 95% CI means: if we repeated the experiment many times, 95% of computed intervals would contain the true parameter. It quantifies estimation uncertainty.`,
+      },
+      {
+        type: "math",
+        title: "Standard Error",
+        content: `Standard error of the mean:`,
+        formula: "SE = \\frac{\\sigma}{\\sqrt{n}}",
+      },
+      {
+        type: "code",
+        title: "Hypothesis Testing",
+        language: "python",
+        code: `from scipy import stats
+import numpy as np
+
+# A/B test: compare two groups
+control = [4.2, 3.8, 4.1, 3.9, 4.0]
+treatment = [4.5, 4.7, 4.3, 4.8, 4.6]
+
+# T-test
+t_stat, p_value = stats.ttest_ind(treatment, control)
+print(f"p-value: {p_value:.4f}")
+
+if p_value < 0.05:
+    print("Statistically significant difference!")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "A smaller p-value suggests:", options: ["Weak evidence", "Strong evidence against null", "Certain truth", "No conclusion"], correct: 1 },
+      { id: 2, question: "Increasing sample size does what to standard error?", options: ["Increases it", "Decreases it", "No effect", "Doubles it"], correct: 1 },
+      { id: 3, question: "Type I error is:", options: ["False negative", "False positive", "Correct rejection", "Correct acceptance"], correct: 1 },
+    ],
+  },
+
+  "core/probability/information-theory": {
+    title: "Information Theory",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Understand entropy as uncertainty measure",
+      "Calculate cross-entropy",
+      "Apply KL divergence in ML",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Information theory, developed by Claude Shannon, quantifies information. In ML, it underlies loss functions (cross-entropy), decision trees, and information-theoretic approaches to learning.`,
+      },
+      {
+        type: "math",
+        title: "Entropy",
+        content: `Entropy measures average uncertainty in a distribution:`,
+        formula: "H(X) = -\\sum_x P(x) \\log_2 P(x)",
+      },
+      {
+        type: "concept",
+        title: "Cross-Entropy Loss",
+        content: `Cross-entropy between true distribution p and predicted distribution q measures how well q predicts p. Lower cross-entropy = better predictions. It's the standard classification loss function.`,
+      },
+      {
+        type: "code",
+        title: "Computing Entropy",
+        language: "python",
+        code: `import numpy as np
+
+def entropy(probs):
+    return -np.sum(probs * np.log2(probs + 1e-10))
+
+# Fair coin: high entropy (uncertain)
+fair = entropy([0.5, 0.5])  # 1.0 bit
+
+# Biased coin: lower entropy
+biased = entropy([0.9, 0.1])  # 0.47 bits
+
+print(f"Fair: {fair:.2f}, Biased: {biased:.2f}")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Maximum entropy for a fair coin flip is:", options: ["0 bits", "0.5 bits", "1 bit", "2 bits"], correct: 2 },
+      { id: 2, question: "Cross-entropy loss is used for:", options: ["Regression", "Classification", "Clustering", "Dimensionality reduction"], correct: 1 },
+      { id: 3, question: "KL divergence measures:", options: ["Similarity of means", "Difference between distributions", "Variance", "Correlation"], correct: 1 },
+    ],
+  },
+
+  // =========================================
+  // ML & AI TRACK
+  // =========================================
+
+  "ml-ai/fundamentals/ml-intro": {
+    title: "Introduction to Machine Learning",
+    duration: "20 min",
+    xpReward: 100,
+    objectives: [
+      "Distinguish supervised, unsupervised, and reinforcement learning",
+      "Understand the ML workflow",
+      "Recognize common ML problems",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Machine learning enables computers to learn patterns from data without being explicitly programmed. It's the foundation of modern AI, powering everything from recommendations to autonomous vehicles.`,
+      },
+      {
+        type: "concept",
+        title: "Types of Machine Learning",
+        content: `Supervised: learn from labeled examples (classification, regression). Unsupervised: find patterns without labels (clustering, dimensionality reduction). Reinforcement: learn from rewards/penalties.`,
+      },
+      {
+        type: "code",
+        title: "Simple ML Pipeline",
+        language: "python",
+        code: `from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+# 1. Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+# 2. Train model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# 3. Evaluate
+accuracy = model.score(X_test, y_test)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Classification is what type of learning?", options: ["Unsupervised", "Supervised", "Reinforcement", "Semi-supervised"], correct: 1 },
+      { id: 2, question: "Clustering is:", options: ["Supervised", "Unsupervised", "Reinforcement", "None"], correct: 1 },
+      { id: 3, question: "What do we call the data used to evaluate?", options: ["Training set", "Validation set", "Test set", "Feature set"], correct: 2 },
+    ],
+  },
+
+  "ml-ai/fundamentals/linear-regression": {
+    title: "Linear Regression",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand linear regression mathematically",
+      "Implement least squares fitting",
+      "Evaluate regression models",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Linear regression finds the best-fitting line through data points. It's the simplest regression model and introduces key concepts like loss functions and optimization that apply to all of ML.`,
+      },
+      {
+        type: "math",
+        title: "Linear Regression Model",
+        content: `Predict y from x:`,
+        formula: "\\hat{y} = wx + b \\quad L = \\frac{1}{n}\\sum_{i=1}^n (y_i - \\hat{y}_i)^2",
+      },
+      {
+        type: "code",
+        title: "Linear Regression in Python",
+        language: "python",
+        code: `from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Fit model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Evaluate
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+print(f"MSE: {mse:.4f}, R²: {r2:.4f}")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "MSE stands for:", options: ["Maximum Standard Error", "Mean Squared Error", "Median Standard Estimate", "Model Selection Error"], correct: 1 },
+      { id: 2, question: "R² of 1.0 means:", options: ["Perfect fit", "No fit", "50% fit", "Overfitting"], correct: 0 },
+      { id: 3, question: "In y = wx + b, w is called:", options: ["Intercept", "Bias", "Slope/Weight", "Residual"], correct: 2 },
+    ],
+  },
+
+  "ml-ai/fundamentals/logistic-regression": {
+    title: "Logistic Regression",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand the sigmoid function",
+      "Apply logistic regression for classification",
+      "Interpret probability outputs",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Despite its name, logistic regression is a classification algorithm. It predicts the probability of a binary outcome using the sigmoid function to squash outputs between 0 and 1.`,
+      },
+      {
+        type: "math",
+        title: "Sigmoid Function",
+        content: `The sigmoid squashes any input to (0, 1):`,
+        formula: "\\sigma(z) = \\frac{1}{1 + e^{-z}} \\quad P(y=1|x) = \\sigma(wx + b)",
+      },
+      {
+        type: "code",
+        title: "Binary Classification",
+        language: "python",
+        code: `from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predict classes
+y_pred = model.predict(X_test)
+
+# Predict probabilities
+y_proba = model.predict_proba(X_test)
+
+print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+print(confusion_matrix(y_test, y_pred))`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Sigmoid output at z=0 is:", options: ["0", "0.5", "1", "-0.5"], correct: 1 },
+      { id: 2, question: "Logistic regression is used for:", options: ["Regression only", "Classification only", "Both", "Neither"], correct: 1 },
+      { id: 3, question: "Cross-entropy loss is preferred because:", options: ["It's simpler", "Works with probabilities", "Faster to compute", "Always equals zero"], correct: 1 },
+    ],
+  },
+
+  "ml-ai/fundamentals/overfitting": {
+    title: "Overfitting & Regularization",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Identify overfitting and underfitting",
+      "Apply L1 and L2 regularization",
+      "Use cross-validation for model selection",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Overfitting occurs when a model memorizes training data but fails to generalize. Regularization and proper validation are essential techniques to build robust models.`,
+      },
+      {
+        type: "concept",
+        title: "Bias-Variance Tradeoff",
+        content: `High bias = underfitting (too simple). High variance = overfitting (too complex). The goal is finding the sweet spot with good generalization.`,
+      },
+      {
+        type: "math",
+        title: "Regularization",
+        content: `Add penalty to loss to constrain weights:`,
+        formula: "L_{reg} = L + \\lambda \\sum w_i^2 \\quad \\text{(L2/Ridge)}",
+      },
+      {
+        type: "code",
+        title: "Cross-Validation",
+        language: "python",
+        code: `from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import Ridge
+
+# Ridge regression (L2)
+model = Ridge(alpha=1.0)
+
+# 5-fold cross-validation
+scores = cross_val_score(model, X, y, cv=5)
+print(f"Mean CV score: {scores.mean():.4f} ± {scores.std():.4f}")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Overfitting means:", options: ["High training error", "High test error", "Model too simple", "Good generalization"], correct: 1 },
+      { id: 2, question: "L2 regularization adds:", options: ["Sum of weights", "Sum of absolute weights", "Sum of squared weights", "No penalty"], correct: 2 },
+      { id: 3, question: "Cross-validation helps:", options: ["Speed up training", "Estimate generalization", "Reduce data needs", "Increase complexity"], correct: 1 },
+    ],
+  },
+
+  // ML & AI - Neural Networks
+  "ml-ai/neural-networks/perceptron": {
+    title: "The Perceptron",
+    duration: "20 min",
+    xpReward: 110,
+    objectives: [
+      "Understand the perceptron as a single neuron",
+      "Implement the perceptron learning algorithm",
+      "Recognize limitations of single-layer networks",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `The perceptron, invented in 1958, is the simplest neural network—a single neuron. It learns to classify linearly separable data and introduced the concept of learning from errors.`,
+      },
+      {
+        type: "math",
+        title: "Perceptron Model",
+        content: `Output is 1 if weighted sum exceeds threshold:`,
+        formula: "y = \\begin{cases} 1 & \\text{if } \\vec{w} \\cdot \\vec{x} + b > 0 \\\\ 0 & \\text{otherwise} \\end{cases}",
+      },
+      {
+        type: "code",
+        title: "Perceptron Implementation",
+        language: "python",
+        code: `import numpy as np
+
+class Perceptron:
+    def __init__(self, lr=0.1):
+        self.lr = lr
+    
+    def fit(self, X, y, epochs=100):
+        self.w = np.zeros(X.shape[1])
+        self.b = 0
+        for _ in range(epochs):
+            for xi, yi in zip(X, y):
+                pred = 1 if np.dot(xi, self.w) + self.b > 0 else 0
+                self.w += self.lr * (yi - pred) * xi
+                self.b += self.lr * (yi - pred)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "A perceptron can solve:", options: ["XOR problem", "Any problem", "Linearly separable problems", "Non-linear problems"], correct: 2 },
+      { id: 2, question: "The perceptron uses what activation?", options: ["Sigmoid", "ReLU", "Step function", "Softmax"], correct: 2 },
+      { id: 3, question: "Who invented the perceptron?", options: ["Hinton", "Rosenblatt", "LeCun", "Bengio"], correct: 1 },
+    ],
+  },
+
+  "ml-ai/neural-networks/multi-layer": {
+    title: "Multi-Layer Networks",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Understand hidden layers and depth",
+      "Apply activation functions (ReLU, sigmoid, tanh)",
+      "Recognize why depth matters",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Adding hidden layers between input and output allows networks to learn non-linear patterns. Deep networks can represent hierarchical features, from edges to objects to concepts.`,
+      },
+      {
+        type: "concept",
+        title: "Activation Functions",
+        content: `ReLU: max(0, x) - fast, avoids vanishing gradients. Sigmoid: (0,1) - good for probabilities. Tanh: (-1,1) - centered at zero. Each has trade-offs in training dynamics.`,
+      },
+      {
+        type: "math",
+        title: "ReLU Activation",
+        content: `The most popular activation today:`,
+        formula: "\\text{ReLU}(x) = \\max(0, x) \\quad \\frac{d}{dx}\\text{ReLU}(x) = \\begin{cases} 1 & x > 0 \\\\ 0 & x \\leq 0 \\end{cases}",
+      },
+      {
+        type: "code",
+        title: "Building an MLP",
+        language: "python",
+        code: `import torch.nn as nn
+
+class MLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.layers = nn.Sequential(
+            nn.Linear(784, 256),
+            nn.ReLU(),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Linear(128, 10)
+        )
+    
+    def forward(self, x):
+        return self.layers(x)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "ReLU(−5) equals:", options: ["-5", "0", "5", "1"], correct: 1 },
+      { id: 2, question: "Hidden layers make networks:", options: ["Linear", "Non-linear", "Faster", "Simpler"], correct: 1 },
+      { id: 3, question: "Vanishing gradients affect:", options: ["Shallow networks", "Deep networks", "Only CNNs", "Only RNNs"], correct: 1 },
+    ],
+  },
+
+  "ml-ai/neural-networks/training": {
+    title: "Training Neural Networks",
+    duration: "35 min",
+    xpReward: 160,
+    objectives: [
+      "Implement forward and backward passes",
+      "Use optimizers (SGD, Adam)",
+      "Apply dropout and batch normalization",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Training neural networks involves iterating through data, computing loss, calculating gradients via backpropagation, and updating weights. Modern frameworks automate this, but understanding the process is essential.`,
+      },
+      {
+        type: "concept",
+        title: "The Training Loop",
+        content: `1. Forward pass: compute predictions. 2. Compute loss. 3. Backward pass: compute gradients. 4. Update weights. 5. Repeat for all batches and epochs.`,
+      },
+      {
+        type: "code",
+        title: "PyTorch Training Loop",
+        language: "python",
+        code: `import torch
+import torch.nn as nn
+import torch.optim as optim
+
+model = MLP()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+for epoch in range(10):
+    for batch_x, batch_y in dataloader:
+        optimizer.zero_grad()          # Clear gradients
+        outputs = model(batch_x)       # Forward
+        loss = criterion(outputs, batch_y)
+        loss.backward()                # Backward
+        optimizer.step()               # Update weights`,
+      },
+      {
+        type: "concept",
+        title: "Regularization Techniques",
+        content: `Dropout randomly zeroes activations during training, preventing co-adaptation. Batch normalization normalizes layer inputs, stabilizing and accelerating training.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Adam optimizer combines:", options: ["SGD and RMSprop", "Momentum and learning rate", "Dropout and normalization", "L1 and L2"], correct: 0 },
+      { id: 2, question: "Dropout is applied during:", options: ["Training only", "Testing only", "Both", "Neither"], correct: 0 },
+      { id: 3, question: "Why zero gradients each step?", options: ["Speed up", "Prevent accumulation", "Increase loss", "Reset weights"], correct: 1 },
+    ],
+  },
+
+  "ml-ai/neural-networks/cnn-intro": {
+    title: "Convolutional Neural Networks",
+    duration: "35 min",
+    xpReward: 160,
+    objectives: [
+      "Understand convolution operations",
+      "Build CNN architectures for images",
+      "Apply pooling and feature extraction",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `CNNs revolutionized computer vision by learning spatial hierarchies of features. Convolutional layers detect local patterns (edges, textures) that combine into higher-level features (objects, scenes).`,
+      },
+      {
+        type: "concept",
+        title: "Convolution Operation",
+        content: `A filter slides over the image, computing dot products. This detects features regardless of position (translation invariance). Multiple filters learn different features.`,
+      },
+      {
+        type: "code",
+        title: "Simple CNN for MNIST",
+        language: "python",
+        code: `import torch.nn as nn
+
+class CNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(1, 32, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(32, 64, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+        self.fc = nn.Linear(64 * 7 * 7, 10)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Pooling layers:", options: ["Add parameters", "Reduce spatial size", "Increase resolution", "Add noise"], correct: 1 },
+      { id: 2, question: "A 3x3 convolution filter has how many parameters (no bias)?", options: ["3", "6", "9", "27"], correct: 2 },
+      { id: 3, question: "CNNs achieve:", options: ["Rotation invariance", "Translation invariance", "Scale invariance", "All of these"], correct: 1 },
+    ],
+  },
+
+  // ML & AI - Advanced Topics
+  "ml-ai/advanced/attention": {
+    title: "Attention Mechanisms",
+    duration: "30 min",
+    xpReward: 150,
+    objectives: [
+      "Understand attention as weighted averaging",
+      "Implement self-attention",
+      "Recognize the Transformer architecture",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Attention allows models to focus on relevant parts of the input. It's the foundation of Transformers, which power modern LLMs like GPT and BERT.`,
+      },
+      {
+        type: "math",
+        title: "Scaled Dot-Product Attention",
+        content: `Query, Key, Value mechanism:`,
+        formula: "\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V",
+      },
+      {
+        type: "concept",
+        title: "Self-Attention",
+        content: `In self-attention, Q, K, V all come from the same sequence. Each position attends to all others, learning contextual relationships without sequential processing.`,
+      },
+      {
+        type: "code",
+        title: "Simple Self-Attention",
+        language: "python",
+        code: `import torch
+import torch.nn.functional as F
+
+def self_attention(x, d_k):
+    # x: (batch, seq_len, d_model)
+    Q = K = V = x  # Simplified
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / (d_k ** 0.5)
+    weights = F.softmax(scores, dim=-1)
+    return torch.matmul(weights, V)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Attention computes:", options: ["Absolute positions", "Weighted averages", "Fixed patterns", "Random samples"], correct: 1 },
+      { id: 2, question: "Transformers replaced:", options: ["CNNs", "RNNs for sequence tasks", "All neural networks", "Attention"], correct: 1 },
+      { id: 3, question: "The scaling factor √d_k prevents:", options: ["Overfitting", "Vanishing gradients", "Softmax saturation", "Memory issues"], correct: 2 },
+    ],
+  },
+
+  "ml-ai/advanced/embeddings": {
+    title: "Word Embeddings",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Understand word vectors and semantic meaning",
+      "Use pre-trained embeddings",
+      "Apply embeddings in NLP tasks",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Word embeddings represent words as dense vectors where similar words have similar vectors. This captures semantic meaning: "king - man + woman ≈ queen".`,
+      },
+      {
+        type: "concept",
+        title: "Vector Semantics",
+        content: `Embeddings are learned from context: words appearing in similar contexts get similar vectors. Methods include Word2Vec, GloVe, and contextual embeddings like BERT.`,
+      },
+      {
+        type: "code",
+        title: "Using Pre-trained Embeddings",
+        language: "python",
+        code: `from gensim.models import KeyedVectors
+
+# Load pre-trained Word2Vec
+model = KeyedVectors.load_word2vec_format('GoogleNews-vectors.bin', binary=True)
+
+# Find similar words
+print(model.most_similar('python'))
+
+# Analogies
+result = model.most_similar(positive=['king', 'woman'], negative=['man'])
+print(result[0])  # ('queen', 0.71)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Word embeddings are:", options: ["One-hot vectors", "Dense vectors", "Sparse matrices", "Binary strings"], correct: 1 },
+      { id: 2, question: "king - man + woman ≈:", options: ["prince", "queen", "king", "woman"], correct: 1 },
+      { id: 3, question: "Contextual embeddings differ because:", options: ["Fixed vocabulary", "Same word can have different vectors", "Only work for English", "Require less data"], correct: 1 },
+    ],
+  },
+
+  "ml-ai/advanced/transfer-learning": {
+    title: "Transfer Learning",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Understand pre-training and fine-tuning",
+      "Apply transfer learning for vision and NLP",
+      "Know when transfer learning helps",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Transfer learning uses knowledge from one task to improve another. Pre-trained models on massive datasets can be fine-tuned on your specific task with much less data.`,
+      },
+      {
+        type: "concept",
+        title: "Fine-Tuning Strategy",
+        content: `Freeze early layers (general features), train later layers (task-specific). Alternatively, fine-tune all layers with a small learning rate. The right approach depends on data similarity and size.`,
+      },
+      {
+        type: "code",
+        title: "Fine-Tuning a Pre-trained Model",
+        language: "python",
+        code: `from transformers import BertForSequenceClassification, Trainer
+
+# Load pre-trained BERT
+model = BertForSequenceClassification.from_pretrained(
+    'bert-base-uncased',
+    num_labels=2  # Your task's classes
+)
+
+# Fine-tune on your data
+trainer = Trainer(
+    model=model,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset
+)
+trainer.train()`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Transfer learning requires:", options: ["No pre-training", "More data than from scratch", "Less task-specific data", "New architecture"], correct: 2 },
+      { id: 2, question: "Early CNN layers typically learn:", options: ["Task-specific features", "General features like edges", "Only color", "Nothing useful"], correct: 1 },
+      { id: 3, question: "Fine-tuning means:", options: ["Training from scratch", "Adjusting pre-trained weights", "Freezing all layers", "Changing architecture"], correct: 1 },
+    ],
+  },
+
+  "ml-ai/advanced/generative-models": {
+    title: "Generative Models",
+    duration: "30 min",
+    xpReward: 150,
+    objectives: [
+      "Understand generative vs discriminative models",
+      "Learn basics of GANs and VAEs",
+      "Recognize diffusion models",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Generative models learn to create new data similar to training data. They power image generation (DALL-E, Midjourney), text generation (GPT), and more.`,
+      },
+      {
+        type: "concept",
+        title: "GANs: Generator vs Discriminator",
+        content: `Generator creates fake samples; Discriminator tries to distinguish real from fake. They compete, and the Generator improves until its outputs are indistinguishable from real data.`,
+      },
+      {
+        type: "concept",
+        title: "Diffusion Models",
+        content: `Add noise to data (forward process), then learn to reverse it (denoising). Start from pure noise and iteratively denoise to generate realistic samples. Powers Stable Diffusion and DALL-E 2.`,
+      },
+      {
+        type: "code",
+        title: "Simple GAN Concept",
+        language: "python",
+        code: `# GAN Training Loop (conceptual)
+for epoch in range(epochs):
+    # Train Discriminator
+    real_loss = criterion(D(real_images), ones)
+    fake_loss = criterion(D(G(noise)), zeros)
+    d_loss = real_loss + fake_loss
+    
+    # Train Generator
+    g_loss = criterion(D(G(noise)), ones)  # Fool D`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "In a GAN, the Generator:", options: ["Classifies images", "Creates fake images", "Detects fakes", "Compresses data"], correct: 1 },
+      { id: 2, question: "Diffusion models work by:", options: ["Compression", "Adding then removing noise", "Direct sampling", "Autoencoding"], correct: 1 },
+      { id: 3, question: "VAE stands for:", options: ["Vector Auto-Encoder", "Variational Auto-Encoder", "Visual Auto-Encoder", "Variable Auto-Encoder"], correct: 1 },
+    ],
+  },
+
+  // =========================================
+  // ALGORITHMS & DATA STRUCTURES TRACK
+  // =========================================
+
+  "algorithms/complexity/big-o": {
+    title: "Big O Notation",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand time and space complexity",
+      "Analyze algorithm efficiency",
+      "Compare common complexity classes",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Big O notation describes how an algorithm's performance scales with input size. It's essential for choosing the right algorithm and data structure for your problem.`,
+      },
+      {
+        type: "math",
+        title: "Common Complexities",
+        content: `From fastest to slowest:`,
+        formula: "O(1) < O(\\log n) < O(n) < O(n \\log n) < O(n^2) < O(2^n) < O(n!)",
+      },
+      {
+        type: "code",
+        title: "Analyzing Complexity",
+        language: "python",
+        code: `# O(1) - Constant
+def get_first(arr):
+    return arr[0]
+
+# O(n) - Linear
+def find_max(arr):
+    max_val = arr[0]
+    for x in arr:  # Loops n times
+        if x > max_val:
+            max_val = x
+    return max_val
+
+# O(n²) - Quadratic
+def bubble_sort(arr):
+    for i in range(len(arr)):  # n times
+        for j in range(len(arr)):  # n times each
+            pass`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "What's the complexity of accessing an array element?", options: ["O(n)", "O(log n)", "O(1)", "O(n²)"], correct: 2 },
+      { id: 2, question: "Binary search has complexity:", options: ["O(n)", "O(log n)", "O(1)", "O(n log n)"], correct: 1 },
+      { id: 3, question: "O(n²) means time:", options: ["Doubles with input", "Quadruples when input doubles", "Stays constant", "Halves"], correct: 1 },
+    ],
+  },
+
+  "algorithms/complexity/space-time": {
+    title: "Space-Time Tradeoffs",
+    duration: "20 min",
+    xpReward: 110,
+    objectives: [
+      "Balance memory usage vs speed",
+      "Apply memoization",
+      "Choose appropriate data structures",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Often we can trade memory for speed or vice versa. Caching results (memoization) uses more memory but avoids recomputation. Understanding this tradeoff is key to optimization.`,
+      },
+      {
+        type: "concept",
+        title: "Memoization",
+        content: `Store computed results to avoid recalculating. Classic example: Fibonacci without memoization is O(2ⁿ); with memoization it's O(n) using O(n) extra space.`,
+      },
+      {
+        type: "code",
+        title: "Fibonacci with Memoization",
+        language: "python",
+        code: `from functools import lru_cache
+
+# Without memoization: O(2^n)
+def fib_slow(n):
+    if n <= 1: return n
+    return fib_slow(n-1) + fib_slow(n-2)
+
+# With memoization: O(n)
+@lru_cache(maxsize=None)
+def fib_fast(n):
+    if n <= 1: return n
+    return fib_fast(n-1) + fib_fast(n-2)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Memoization trades:", options: ["Time for space", "Space for time", "Accuracy for speed", "Nothing"], correct: 1 },
+      { id: 2, question: "A hash table uses extra space to achieve:", options: ["O(n) lookup", "O(log n) lookup", "O(1) average lookup", "O(n²) lookup"], correct: 2 },
+      { id: 3, question: "Dynamic programming often uses:", options: ["Recursion only", "Memoization/tabulation", "Brute force", "Random sampling"], correct: 1 },
+    ],
+  },
+
+  "algorithms/searching/binary-search": {
+    title: "Binary Search",
+    duration: "20 min",
+    xpReward: 100,
+    objectives: [
+      "Implement binary search correctly",
+      "Handle edge cases and variants",
+      "Apply binary search to problem solving",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Binary search finds elements in sorted arrays in O(log n) time by repeatedly halving the search space. It's a fundamental algorithm with many applications beyond simple searching.`,
+      },
+      {
+        type: "code",
+        title: "Binary Search Implementation",
+        language: "python",
+        code: `def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1  # Not found`,
+      },
+      {
+        type: "concept",
+        title: "Applications",
+        content: `Binary search applies to: finding insertion points, searching rotated arrays, finding peaks, square root calculation, and any monotonic function.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Binary search requires:", options: ["Any array", "Sorted array", "Linked list", "Hash table"], correct: 1 },
+      { id: 2, question: "How many comparisons for 1 million elements?", options: ["1 million", "1000", "~20", "1"], correct: 2 },
+      { id: 3, question: "mid = (left + right) // 2 can overflow. Better:", options: ["left - (right-left)//2", "left + (right-left)//2", "(left * right) / 2", "right // 2"], correct: 1 },
+    ],
+  },
+
+  "algorithms/searching/graph-search": {
+    title: "Graph Search: BFS & DFS",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Implement BFS and DFS",
+      "Know when to use each",
+      "Apply to path finding and traversal",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `BFS (Breadth-First Search) explores level by level; DFS (Depth-First Search) goes as deep as possible first. Both are fundamental for graph problems.`,
+      },
+      {
+        type: "concept",
+        title: "BFS vs DFS",
+        content: `BFS: uses queue, finds shortest path in unweighted graphs, level-order traversal. DFS: uses stack/recursion, good for detecting cycles, topological sort, solving mazes.`,
+      },
+      {
+        type: "code",
+        title: "BFS and DFS",
+        language: "python",
+        code: `from collections import deque
+
+def bfs(graph, start):
+    visited = {start}
+    queue = deque([start])
+    while queue:
+        node = queue.popleft()
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+def dfs(graph, node, visited=None):
+    if visited is None: visited = set()
+    visited.add(node)
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "BFS uses what data structure?", options: ["Stack", "Queue", "Heap", "Array"], correct: 1 },
+      { id: 2, question: "For shortest path in unweighted graph, use:", options: ["DFS", "BFS", "Either", "Neither"], correct: 1 },
+      { id: 3, question: "DFS can be implemented with:", options: ["Queue only", "Stack or recursion", "Heap only", "Hash table"], correct: 1 },
+    ],
+  },
+
+  // More algorithm lessons...
+  "algorithms/sorting/quicksort": {
+    title: "QuickSort",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Understand divide-and-conquer sorting",
+      "Implement partition and QuickSort",
+      "Analyze average and worst-case complexity",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `QuickSort is one of the fastest sorting algorithms in practice. It picks a pivot, partitions elements around it, and recursively sorts the partitions.`,
+      },
+      {
+        type: "code",
+        title: "QuickSort Implementation",
+        language: "python",
+        code: `def quicksort(arr, low=0, high=None):
+    if high is None: high = len(arr) - 1
+    if low < high:
+        pivot_idx = partition(arr, low, high)
+        quicksort(arr, low, pivot_idx - 1)
+        quicksort(arr, pivot_idx + 1, high)
+
+def partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i+1], arr[high] = arr[high], arr[i+1]
+    return i + 1`,
+      },
+      {
+        type: "math",
+        title: "Complexity",
+        content: `Average vs worst case:`,
+        formula: "\\text{Average: } O(n \\log n) \\quad \\text{Worst: } O(n^2)",
+      },
+    ],
+    practices: [
+      { id: 1, question: "QuickSort's average complexity is:", options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"], correct: 1 },
+      { id: 2, question: "Worst case occurs when:", options: ["Random pivot", "Already sorted", "Reverse sorted", "B or C"], correct: 3 },
+      { id: 3, question: "QuickSort is:", options: ["Stable", "Not stable", "Always O(n log n)", "In-place and stable"], correct: 1 },
+    ],
+  },
+
+  "algorithms/sorting/mergesort": {
+    title: "MergeSort",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Implement merge sort",
+      "Understand stable sorting",
+      "Compare with QuickSort",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `MergeSort divides the array in half, recursively sorts each half, then merges them. It guarantees O(n log n) time and is stable (preserves relative order of equal elements).`,
+      },
+      {
+        type: "code",
+        title: "MergeSort Implementation",
+        language: "python",
+        code: `def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    return result + left[i:] + right[j:]`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "MergeSort's worst case is:", options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"], correct: 1 },
+      { id: 2, question: "MergeSort is stable because:", options: ["It's fast", "Uses extra memory", "Preserves order of equal elements", "Uses recursion"], correct: 2 },
+      { id: 3, question: "MergeSort's main disadvantage:", options: ["Slow", "Unstable", "O(n) extra space", "Not recursive"], correct: 2 },
+    ],
+  },
+
+  // =========================================
+  // NETWORKING & IOT TRACK
+  // =========================================
+
+  "networking/protocols/tcp-ip": {
+    title: "TCP/IP Fundamentals",
+    duration: "30 min",
+    xpReward: 130,
+    objectives: [
+      "Understand the TCP/IP model layers",
+      "Explain how data travels across networks",
+      "Compare TCP vs UDP",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `TCP/IP is the protocol suite that powers the internet. It defines how data is packaged, addressed, transmitted, routed, and received across networks.`,
+      },
+      {
+        type: "concept",
+        title: "The Four Layers",
+        content: `Application (HTTP, SMTP, FTP) → Transport (TCP/UDP) → Internet (IP) → Network Access (Ethernet, WiFi). Each layer adds headers for its functionality.`,
+      },
+      {
+        type: "code",
+        title: "Socket Programming",
+        language: "python",
+        code: `import socket
+
+# TCP Server
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('localhost', 8080))
+server.listen(5)
+
+# TCP Client
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('localhost', 8080))
+client.send(b'Hello, Server!')`,
+      },
+      {
+        type: "concept",
+        title: "TCP vs UDP",
+        content: `TCP: reliable, ordered, connection-oriented. Used for web, email, file transfer. UDP: fast, no guarantees. Used for streaming, gaming, DNS.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Which layer handles routing?", options: ["Application", "Transport", "Internet", "Network Access"], correct: 2 },
+      { id: 2, question: "TCP provides:", options: ["Speed only", "Reliability", "Broadcasting", "Connectionless"], correct: 1 },
+      { id: 3, question: "HTTP operates at which layer?", options: ["Transport", "Internet", "Application", "Physical"], correct: 2 },
+    ],
+  },
+
+  "networking/protocols/http": {
+    title: "HTTP Protocol",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand HTTP request/response cycle",
+      "Work with HTTP methods and status codes",
+      "Implement RESTful APIs",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `HTTP (HyperText Transfer Protocol) is how browsers and servers communicate. Understanding it is essential for web development and API design.`,
+      },
+      {
+        type: "concept",
+        title: "HTTP Methods",
+        content: `GET: retrieve data. POST: create resource. PUT: update resource. DELETE: remove resource. PATCH: partial update. These form the basis of REST APIs.`,
+      },
+      {
+        type: "code",
+        title: "Making HTTP Requests",
+        language: "python",
+        code: `import requests
+
+# GET request
+response = requests.get('https://api.example.com/users')
+print(response.status_code)  # 200
+print(response.json())
+
+# POST request
+data = {'name': 'John', 'email': 'john@example.com'}
+response = requests.post('https://api.example.com/users', json=data)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Which method retrieves data?", options: ["POST", "GET", "DELETE", "PUT"], correct: 1 },
+      { id: 2, question: "Status code 404 means:", options: ["Success", "Server error", "Not found", "Redirect"], correct: 2 },
+      { id: 3, question: "REST stands for:", options: ["Real-time State Transfer", "Representational State Transfer", "Remote System Transfer", "Request-Response State Transfer"], correct: 1 },
+    ],
+  },
+
+  // More networking lessons...
+  "networking/security/encryption": {
+    title: "Encryption Basics",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Understand symmetric vs asymmetric encryption",
+      "Know when to use each type",
+      "Apply HTTPS and TLS concepts",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Encryption protects data from unauthorized access. It's fundamental to secure communication, authentication, and data storage.`,
+      },
+      {
+        type: "concept",
+        title: "Symmetric vs Asymmetric",
+        content: `Symmetric: same key for encrypt/decrypt (AES). Fast but key distribution problem. Asymmetric: public/private key pairs (RSA). Slower but solves key distribution.`,
+      },
+      {
+        type: "code",
+        title: "Simple Encryption with Python",
+        language: "python",
+        code: `from cryptography.fernet import Fernet
+
+# Generate key
+key = Fernet.generate_key()
+cipher = Fernet(key)
+
+# Encrypt
+message = b"Secret message"
+encrypted = cipher.encrypt(message)
+
+# Decrypt
+decrypted = cipher.decrypt(encrypted)`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "HTTPS uses:", options: ["Only symmetric", "Only asymmetric", "Both (TLS)", "No encryption"], correct: 2 },
+      { id: 2, question: "Public key can be:", options: ["Shared freely", "Kept secret", "Used only once", "Ignored"], correct: 0 },
+      { id: 3, question: "AES is:", options: ["Asymmetric", "Symmetric", "Hash function", "Protocol"], correct: 1 },
+    ],
+  },
+
+  "networking/iot/mqtt": {
+    title: "MQTT Protocol",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand publish-subscribe pattern",
+      "Implement MQTT clients",
+      "Design IoT communication",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `MQTT is a lightweight messaging protocol designed for IoT. It uses publish-subscribe pattern, making it perfect for resource-constrained devices and unreliable networks.`,
+      },
+      {
+        type: "concept",
+        title: "Pub-Sub Architecture",
+        content: `Publishers send messages to topics; subscribers listen to topics. The broker handles routing. Decouples senders from receivers for scalable IoT systems.`,
+      },
+      {
+        type: "code",
+        title: "MQTT Example",
+        language: "python",
+        code: `import paho.mqtt.client as mqtt
+
+def on_message(client, userdata, msg):
+    print(f"{msg.topic}: {msg.payload.decode()}")
+
+client = mqtt.Client()
+client.on_message = on_message
+client.connect("broker.hivemq.com", 1883)
+client.subscribe("sensors/temperature")
+client.publish("sensors/temperature", "22.5")
+client.loop_forever()`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "MQTT stands for:", options: ["Message Queue Telemetry Transport", "Multi-Queue Transfer Technology", "Messaging Queue Topic Transfer", "Micro Queue Transport Type"], correct: 0 },
+      { id: 2, question: "In MQTT, the broker:", options: ["Sends data only", "Receives data only", "Routes messages", "Stores data"], correct: 2 },
+      { id: 3, question: "MQTT is designed for:", options: ["High bandwidth", "Low bandwidth IoT", "File transfer", "Video streaming"], correct: 1 },
+    ],
+  },
+
+  // =========================================
+  // CYBERSECURITY TRACK
+  // =========================================
+
+  "cybersecurity/fundamentals/security-principles": {
+    title: "Security Principles",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand CIA triad",
+      "Apply defense in depth",
+      "Recognize common threats",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Cybersecurity protects systems, networks, and data from digital attacks. Understanding core principles helps design secure systems from the ground up.`,
+      },
+      {
+        type: "concept",
+        title: "The CIA Triad",
+        content: `Confidentiality: only authorized access. Integrity: data is accurate and unmodified. Availability: systems are accessible when needed. All security measures support these three goals.`,
+      },
+      {
+        type: "concept",
+        title: "Defense in Depth",
+        content: `Layer multiple security controls. If one fails, others protect. Examples: firewalls + encryption + access control + monitoring + backups.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "CIA stands for:", options: ["Central Intelligence Agency", "Confidentiality Integrity Availability", "Computer Information Access", "Cyber Intelligence Analysis"], correct: 1 },
+      { id: 2, question: "Defense in depth uses:", options: ["Single strong control", "Multiple layers", "Only encryption", "Just firewalls"], correct: 1 },
+      { id: 3, question: "Availability ensures:", options: ["Data is secret", "Data is correct", "Systems are accessible", "Users are authenticated"], correct: 2 },
+    ],
+  },
+
+  "cybersecurity/fundamentals/authentication": {
+    title: "Authentication & Authorization",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Implement secure authentication",
+      "Understand OAuth and JWT",
+      "Apply role-based access control",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Authentication verifies identity (who are you?); authorization determines permissions (what can you do?). Both are crucial for secure applications.`,
+      },
+      {
+        type: "concept",
+        title: "Multi-Factor Authentication",
+        content: `Something you know (password) + something you have (phone) + something you are (fingerprint). MFA dramatically reduces account compromise.`,
+      },
+      {
+        type: "code",
+        title: "JWT Authentication",
+        language: "python",
+        code: `import jwt
+
+# Create token
+payload = {'user_id': 123, 'exp': datetime.utcnow() + timedelta(hours=1)}
+token = jwt.encode(payload, 'secret_key', algorithm='HS256')
+
+# Verify token
+try:
+    decoded = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+    print(decoded['user_id'])
+except jwt.ExpiredSignatureError:
+    print("Token expired")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Authentication answers:", options: ["What can you do?", "Who are you?", "Where are you?", "When did you login?"], correct: 1 },
+      { id: 2, question: "JWT stands for:", options: ["Java Web Token", "JSON Web Token", "JavaScript Web Transfer", "Joint Web Technology"], correct: 1 },
+      { id: 3, question: "MFA uses:", options: ["One factor", "Two factors only", "Multiple factors", "No factors"], correct: 2 },
+    ],
+  },
+
+  "cybersecurity/web/owasp-top10": {
+    title: "OWASP Top 10",
+    duration: "35 min",
+    xpReward: 160,
+    objectives: [
+      "Identify common web vulnerabilities",
+      "Prevent SQL injection and XSS",
+      "Apply secure coding practices",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `OWASP Top 10 lists the most critical web application security risks. Understanding and preventing these is essential for any web developer.`,
+      },
+      {
+        type: "concept",
+        title: "Key Vulnerabilities",
+        content: `Injection (SQL, command), Broken Authentication, XSS, Insecure Direct Object References, Security Misconfiguration. Each can lead to data breach or system compromise.`,
+      },
+      {
+        type: "code",
+        title: "Preventing SQL Injection",
+        language: "python",
+        code: `# VULNERABLE - Never do this!
+query = f"SELECT * FROM users WHERE id = {user_input}"
+
+# SAFE - Use parameterized queries
+cursor.execute("SELECT * FROM users WHERE id = ?", (user_input,))
+
+# Or use ORM
+user = User.query.filter_by(id=user_input).first()`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "SQL injection is prevented by:", options: ["Strong passwords", "Parameterized queries", "HTTPS", "Firewalls"], correct: 1 },
+      { id: 2, question: "XSS affects:", options: ["Database", "Server", "Client/Browser", "Network"], correct: 2 },
+      { id: 3, question: "OWASP is:", options: ["A company", "A nonprofit security community", "A government agency", "An encryption algorithm"], correct: 1 },
+    ],
+  },
+
+  "cybersecurity/web/secure-coding": {
+    title: "Secure Coding Practices",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Validate and sanitize input",
+      "Handle errors securely",
+      "Manage secrets properly",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Secure coding prevents vulnerabilities from entering your codebase. It's cheaper to write secure code than to fix security issues later.`,
+      },
+      {
+        type: "concept",
+        title: "Input Validation",
+        content: `Never trust user input. Validate type, length, format, and range. Sanitize before display. Reject rather than sanitize when possible.`,
+      },
+      {
+        type: "code",
+        title: "Secure Input Handling",
+        language: "python",
+        code: `import re
+from html import escape
+
+def validate_email(email):
+    pattern = r'^[\\w\\.-]+@[\\w\\.-]+\\.\\w+$'
+    if not re.match(pattern, email):
+        raise ValueError("Invalid email")
+    return email
+
+def sanitize_for_html(user_input):
+    return escape(user_input)  # Prevents XSS`,
+      },
+      {
+        type: "concept",
+        title: "Secret Management",
+        content: `Never hardcode secrets. Use environment variables or secret managers. Rotate secrets regularly. Different secrets for dev/prod.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Input validation should:", options: ["Trust user input", "Reject invalid input", "Only check client-side", "Ignore edge cases"], correct: 1 },
+      { id: 2, question: "Secrets should be:", options: ["In source code", "In environment variables", "Shared publicly", "Hardcoded"], correct: 1 },
+      { id: 3, question: "Error messages should:", options: ["Show stack traces", "Be generic to users", "Include passwords", "Show SQL queries"], correct: 1 },
+    ],
+  },
+
+  // =========================================
+  // SYSTEM ARCHITECTURE TRACK
+  // =========================================
+
+  "systems/architecture/microservices": {
+    title: "Microservices Architecture",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Compare monolith vs microservices",
+      "Design service boundaries",
+      "Handle inter-service communication",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Microservices decompose applications into small, independent services. Each service owns its data and can be deployed independently, enabling scalability and team autonomy.`,
+      },
+      {
+        type: "concept",
+        title: "When to Use Microservices",
+        content: `Good for: large teams, independent scaling needs, polyglot tech stacks. Bad for: small teams, simple apps, tight deadlines. Start monolith, extract services as needed.`,
+      },
+      {
+        type: "concept",
+        title: "Communication Patterns",
+        content: `Synchronous: REST, gRPC (request-response). Asynchronous: message queues, event streaming (decoupled, resilient). Choose based on consistency and latency requirements.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Microservices enable:", options: ["Faster initial development", "Independent deployment", "Simpler debugging", "Less infrastructure"], correct: 1 },
+      { id: 2, question: "Each microservice should:", options: ["Share database", "Own its data", "Use same language", "Be huge"], correct: 1 },
+      { id: 3, question: "Best for small team starting out:", options: ["Microservices", "Monolith", "Serverless only", "No backend"], correct: 1 },
+    ],
+  },
+
+  "systems/architecture/scalability": {
+    title: "Scalability Patterns",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Design for horizontal scaling",
+      "Implement caching strategies",
+      "Handle database scaling",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Scalability is the ability to handle growing load. Horizontal scaling (more machines) is generally preferred over vertical (bigger machines) for resilience and cost.`,
+      },
+      {
+        type: "concept",
+        title: "Caching",
+        content: `Cache reduces database load and latency. Levels: browser cache, CDN, application cache (Redis), database cache. Invalidation is the hard part—TTL or event-based.`,
+      },
+      {
+        type: "concept",
+        title: "Database Scaling",
+        content: `Read replicas handle read load. Sharding partitions data across databases. NoSQL offers horizontal scaling. Choose based on data model and consistency needs.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Horizontal scaling means:", options: ["Bigger server", "More servers", "Faster CPU", "More RAM"], correct: 1 },
+      { id: 2, question: "Redis is commonly used for:", options: ["Primary database", "Caching", "File storage", "ML training"], correct: 1 },
+      { id: 3, question: "Sharding helps with:", options: ["Caching", "Write scalability", "Code organization", "Security"], correct: 1 },
+    ],
+  },
+
+  "systems/architecture/reliability": {
+    title: "Reliability & Resilience",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Design for failure",
+      "Implement circuit breakers",
+      "Apply chaos engineering principles",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `In distributed systems, failures are inevitable. Resilient systems gracefully handle failures, recover quickly, and minimize user impact.`,
+      },
+      {
+        type: "concept",
+        title: "Circuit Breaker Pattern",
+        content: `When a service fails repeatedly, "open" the circuit to fail fast instead of timing out. Periodically test if service recovered. Prevents cascade failures.`,
+      },
+      {
+        type: "concept",
+        title: "Redundancy",
+        content: `Multiple instances behind load balancers. Multi-region deployment for disaster recovery. Data replication. No single points of failure.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Circuit breaker prevents:", options: ["All failures", "Cascade failures", "Network issues", "Code bugs"], correct: 1 },
+      { id: 2, question: "Chaos engineering:", options: ["Causes production bugs", "Tests resilience by injecting failures", "Is only for large companies", "Replaces testing"], correct: 1 },
+      { id: 3, question: "MTTR stands for:", options: ["Mean Time To Repair", "Maximum Time To Respond", "Minimum Time To Restart", "Mean Total Technical Resources"], correct: 0 },
+    ],
+  },
+
+  "systems/architecture/event-driven": {
+    title: "Event-Driven Architecture",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Design event-driven systems",
+      "Use message queues effectively",
+      "Apply event sourcing patterns",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Event-driven architecture uses events to trigger and communicate between decoupled services. It enables real-time processing, scalability, and loose coupling.`,
+      },
+      {
+        type: "concept",
+        title: "Event Sourcing",
+        content: `Store events as the source of truth, not current state. Replay events to reconstruct state. Enables audit logs, time travel, and complex event processing.`,
+      },
+      {
+        type: "concept",
+        title: "Message Queues",
+        content: `RabbitMQ, Kafka, SQS decouple producers from consumers. Provides buffering, retry, and ordering guarantees. Essential for async processing.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Event-driven enables:", options: ["Tight coupling", "Loose coupling", "Synchronous only", "No scalability"], correct: 1 },
+      { id: 2, question: "Kafka is used for:", options: ["Caching", "Event streaming", "SQL queries", "File storage"], correct: 1 },
+      { id: 3, question: "Event sourcing stores:", options: ["Current state only", "Events as source of truth", "No data", "Only deletes"], correct: 1 },
+    ],
+  },
 };
 
 // Get all lessons in order for navigation
@@ -582,16 +2404,72 @@ export const allLessons: LessonMetadata[] = [
   { id: "foundation/number-systems/binary-intro", title: "Introduction to Binary", duration: "15 min", trackId: "foundation", moduleId: "number-systems", trackTitle: "Foundation" },
   { id: "foundation/number-systems/binary-arithmetic", title: "Binary Arithmetic", duration: "20 min", trackId: "foundation", moduleId: "number-systems", trackTitle: "Foundation" },
   { id: "foundation/number-systems/hexadecimal", title: "Hexadecimal & Octal", duration: "18 min", trackId: "foundation", moduleId: "number-systems", trackTitle: "Foundation" },
-  { id: "foundation/number-systems/floating-point", title: "Floating Point", duration: "25 min", trackId: "foundation", moduleId: "number-systems", trackTitle: "Foundation" },
   // Foundation - Boolean Algebra
   { id: "foundation/boolean-algebra/logic-gates", title: "Logic Gates Fundamentals", duration: "20 min", trackId: "foundation", moduleId: "boolean-algebra", trackTitle: "Foundation" },
   { id: "foundation/boolean-algebra/truth-tables", title: "Truth Tables & Expressions", duration: "22 min", trackId: "foundation", moduleId: "boolean-algebra", trackTitle: "Foundation" },
   { id: "foundation/boolean-algebra/boolean-laws", title: "Boolean Laws & Simplification", duration: "25 min", trackId: "foundation", moduleId: "boolean-algebra", trackTitle: "Foundation" },
-  { id: "foundation/boolean-algebra/circuit-design", title: "Digital Circuit Design", duration: "30 min", trackId: "foundation", moduleId: "boolean-algebra", trackTitle: "Foundation" },
   // Foundation - Set Theory
   { id: "foundation/set-theory/sets-intro", title: "Introduction to Sets", duration: "15 min", trackId: "foundation", moduleId: "set-theory", trackTitle: "Foundation" },
   { id: "foundation/set-theory/set-operations", title: "Set Operations", duration: "20 min", trackId: "foundation", moduleId: "set-theory", trackTitle: "Foundation" },
   { id: "foundation/set-theory/relations", title: "Relations & Functions", duration: "25 min", trackId: "foundation", moduleId: "set-theory", trackTitle: "Foundation" },
+
+  // Core Programming - Linear Algebra
+  { id: "core/linear-algebra/vectors-intro", title: "Introduction to Vectors", duration: "20 min", trackId: "core", moduleId: "linear-algebra", trackTitle: "Core Programming" },
+  { id: "core/linear-algebra/matrices-intro", title: "Introduction to Matrices", duration: "25 min", trackId: "core", moduleId: "linear-algebra", trackTitle: "Core Programming" },
+  { id: "core/linear-algebra/matrix-multiplication", title: "Matrix Multiplication", duration: "30 min", trackId: "core", moduleId: "linear-algebra", trackTitle: "Core Programming" },
+  { id: "core/linear-algebra/linear-transformations", title: "Linear Transformations", duration: "25 min", trackId: "core", moduleId: "linear-algebra", trackTitle: "Core Programming" },
+  // Core Programming - Calculus
+  { id: "core/calculus/derivatives-intro", title: "Introduction to Derivatives", duration: "25 min", trackId: "core", moduleId: "calculus", trackTitle: "Core Programming" },
+  { id: "core/calculus/gradients", title: "Gradients & Partial Derivatives", duration: "30 min", trackId: "core", moduleId: "calculus", trackTitle: "Core Programming" },
+  { id: "core/calculus/chain-rule", title: "Chain Rule & Backpropagation", duration: "35 min", trackId: "core", moduleId: "calculus", trackTitle: "Core Programming" },
+  { id: "core/calculus/optimization", title: "Optimization & Gradient Descent", duration: "30 min", trackId: "core", moduleId: "calculus", trackTitle: "Core Programming" },
+  // Core Programming - Probability
+  { id: "core/probability/probability-basics", title: "Probability Fundamentals", duration: "20 min", trackId: "core", moduleId: "probability", trackTitle: "Core Programming" },
+  { id: "core/probability/distributions", title: "Probability Distributions", duration: "25 min", trackId: "core", moduleId: "probability", trackTitle: "Core Programming" },
+  { id: "core/probability/statistical-inference", title: "Statistical Inference", duration: "30 min", trackId: "core", moduleId: "probability", trackTitle: "Core Programming" },
+  { id: "core/probability/information-theory", title: "Information Theory", duration: "25 min", trackId: "core", moduleId: "probability", trackTitle: "Core Programming" },
+
+  // ML & AI - Fundamentals
+  { id: "ml-ai/fundamentals/ml-intro", title: "Introduction to Machine Learning", duration: "20 min", trackId: "ml-ai", moduleId: "fundamentals", trackTitle: "ML & AI" },
+  { id: "ml-ai/fundamentals/linear-regression", title: "Linear Regression", duration: "25 min", trackId: "ml-ai", moduleId: "fundamentals", trackTitle: "ML & AI" },
+  { id: "ml-ai/fundamentals/logistic-regression", title: "Logistic Regression", duration: "25 min", trackId: "ml-ai", moduleId: "fundamentals", trackTitle: "ML & AI" },
+  { id: "ml-ai/fundamentals/overfitting", title: "Overfitting & Regularization", duration: "30 min", trackId: "ml-ai", moduleId: "fundamentals", trackTitle: "ML & AI" },
+  // ML & AI - Neural Networks
+  { id: "ml-ai/neural-networks/perceptron", title: "The Perceptron", duration: "20 min", trackId: "ml-ai", moduleId: "neural-networks", trackTitle: "ML & AI" },
+  { id: "ml-ai/neural-networks/multi-layer", title: "Multi-Layer Networks", duration: "30 min", trackId: "ml-ai", moduleId: "neural-networks", trackTitle: "ML & AI" },
+  { id: "ml-ai/neural-networks/training", title: "Training Neural Networks", duration: "35 min", trackId: "ml-ai", moduleId: "neural-networks", trackTitle: "ML & AI" },
+  { id: "ml-ai/neural-networks/cnn-intro", title: "Convolutional Neural Networks", duration: "35 min", trackId: "ml-ai", moduleId: "neural-networks", trackTitle: "ML & AI" },
+  // ML & AI - Advanced
+  { id: "ml-ai/advanced/attention", title: "Attention Mechanisms", duration: "30 min", trackId: "ml-ai", moduleId: "advanced", trackTitle: "ML & AI" },
+  { id: "ml-ai/advanced/embeddings", title: "Word Embeddings", duration: "25 min", trackId: "ml-ai", moduleId: "advanced", trackTitle: "ML & AI" },
+  { id: "ml-ai/advanced/transfer-learning", title: "Transfer Learning", duration: "25 min", trackId: "ml-ai", moduleId: "advanced", trackTitle: "ML & AI" },
+  { id: "ml-ai/advanced/generative-models", title: "Generative Models", duration: "30 min", trackId: "ml-ai", moduleId: "advanced", trackTitle: "ML & AI" },
+
+  // Algorithms & Data Structures
+  { id: "algorithms/complexity/big-o", title: "Big O Notation", duration: "25 min", trackId: "algorithms", moduleId: "complexity", trackTitle: "Algorithms" },
+  { id: "algorithms/complexity/space-time", title: "Space-Time Tradeoffs", duration: "20 min", trackId: "algorithms", moduleId: "complexity", trackTitle: "Algorithms" },
+  { id: "algorithms/searching/binary-search", title: "Binary Search", duration: "20 min", trackId: "algorithms", moduleId: "searching", trackTitle: "Algorithms" },
+  { id: "algorithms/searching/graph-search", title: "Graph Search: BFS & DFS", duration: "30 min", trackId: "algorithms", moduleId: "searching", trackTitle: "Algorithms" },
+  { id: "algorithms/sorting/quicksort", title: "QuickSort", duration: "25 min", trackId: "algorithms", moduleId: "sorting", trackTitle: "Algorithms" },
+  { id: "algorithms/sorting/mergesort", title: "MergeSort", duration: "25 min", trackId: "algorithms", moduleId: "sorting", trackTitle: "Algorithms" },
+
+  // Networking & IoT
+  { id: "networking/protocols/tcp-ip", title: "TCP/IP Fundamentals", duration: "30 min", trackId: "networking", moduleId: "protocols", trackTitle: "Networking" },
+  { id: "networking/protocols/http", title: "HTTP Protocol", duration: "25 min", trackId: "networking", moduleId: "protocols", trackTitle: "Networking" },
+  { id: "networking/security/encryption", title: "Encryption Basics", duration: "30 min", trackId: "networking", moduleId: "security", trackTitle: "Networking" },
+  { id: "networking/iot/mqtt", title: "MQTT Protocol", duration: "25 min", trackId: "networking", moduleId: "iot", trackTitle: "Networking" },
+
+  // Cybersecurity
+  { id: "cybersecurity/fundamentals/security-principles", title: "Security Principles", duration: "25 min", trackId: "cybersecurity", moduleId: "fundamentals", trackTitle: "Cybersecurity" },
+  { id: "cybersecurity/fundamentals/authentication", title: "Authentication & Authorization", duration: "30 min", trackId: "cybersecurity", moduleId: "fundamentals", trackTitle: "Cybersecurity" },
+  { id: "cybersecurity/web/owasp-top10", title: "OWASP Top 10", duration: "35 min", trackId: "cybersecurity", moduleId: "web", trackTitle: "Cybersecurity" },
+  { id: "cybersecurity/web/secure-coding", title: "Secure Coding Practices", duration: "30 min", trackId: "cybersecurity", moduleId: "web", trackTitle: "Cybersecurity" },
+
+  // System Architecture
+  { id: "systems/architecture/microservices", title: "Microservices Architecture", duration: "30 min", trackId: "systems", moduleId: "architecture", trackTitle: "System Architecture" },
+  { id: "systems/architecture/scalability", title: "Scalability Patterns", duration: "30 min", trackId: "systems", moduleId: "architecture", trackTitle: "System Architecture" },
+  { id: "systems/architecture/reliability", title: "Reliability & Resilience", duration: "30 min", trackId: "systems", moduleId: "architecture", trackTitle: "System Architecture" },
+  { id: "systems/architecture/event-driven", title: "Event-Driven Architecture", duration: "30 min", trackId: "systems", moduleId: "architecture", trackTitle: "System Architecture" },
 ];
 
 // Helper to get next uncompleted lesson
