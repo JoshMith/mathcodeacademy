@@ -43,7 +43,6 @@ function MathBlock({ math, display = false }: { math: string; display?: boolean 
 export default function Lesson() {
   const { trackId, moduleId, lessonId } = useParams();
   const navigate = useNavigate();
-  const [currentSection, setCurrentSection] = useState(0);
   const [showPractice, setShowPractice] = useState(false);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
@@ -55,6 +54,11 @@ export default function Lesson() {
   const fullLessonId = `${trackId}/${moduleId}/${lessonId}`;
   const lessonContent = getLessonById(fullLessonId);
   const alreadyCompleted = isLessonCompleted(fullLessonId);
+
+  // Scroll to top when lesson changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [trackId, moduleId, lessonId]);
 
   // Get track title for badge
   const lessonMeta = allLessons.find(l => l.id === fullLessonId);
@@ -90,7 +94,7 @@ export default function Lesson() {
     );
   }
 
-  const progress = ((currentSection + 1) / lessonContent.sections.length) * 100;
+  const progress = showPractice ? 100 : 50;
 
   const handleAnswer = (questionId: number, optionIndex: number) => {
     setAnswers({ ...answers, [questionId]: optionIndex });
@@ -172,16 +176,12 @@ export default function Lesson() {
           {/* Content */}
           {!showPractice ? (
             <motion.div
-              key={currentSection}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               className="space-y-6"
             >
               {lessonContent.sections.map((section, index) => (
-                <div
-                  key={index}
-                  className={`${index > currentSection ? "opacity-40 pointer-events-none" : ""}`}
-                >
+                <div key={index}>
                   {section.type === "text" && (
                     <p className="text-lg leading-relaxed text-muted-foreground">
                       {section.content}
@@ -250,29 +250,17 @@ export default function Lesson() {
 
               {/* Navigation */}
               <div className="flex items-center justify-between pt-8 border-t border-border/50">
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentSection(Math.max(0, currentSection - 1))}
-                  disabled={currentSection === 0}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Previous
-                </Button>
+                <Link to="/curriculum">
+                  <Button variant="outline">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Curriculum
+                  </Button>
+                </Link>
 
-                {currentSection < lessonContent.sections.length - 1 ? (
-                  <Button
-                    variant="hero"
-                    onClick={() => setCurrentSection(currentSection + 1)}
-                  >
-                    Continue
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                ) : (
-                  <Button variant="hero" onClick={() => setShowPractice(true)}>
-                    Start Practice
-                    <Play className="h-4 w-4 ml-2" />
-                  </Button>
-                )}
+                <Button variant="hero" onClick={() => setShowPractice(true)}>
+                  Start Practice
+                  <Play className="h-4 w-4 ml-2" />
+                </Button>
               </div>
             </motion.div>
           ) : (
