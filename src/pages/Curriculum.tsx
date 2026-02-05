@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
@@ -13,12 +12,14 @@ import {
   ChevronRight,
   Clock,
   CheckCircle2,
-  Lock,
-  Star
+  Server,
+  Cpu
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProgress } from "@/hooks/useProgress";
+import { allLessons } from "@/data/lessons";
 
+// Build tracks from lesson data
 const tracks = [
   {
     id: "foundation",
@@ -33,34 +34,17 @@ const tracks = [
       {
         id: "number-systems",
         title: "Number Systems & Binary",
-        lessons: [
-          { id: "binary-intro", title: "Introduction to Binary", duration: "15 min", completed: true },
-          { id: "binary-arithmetic", title: "Binary Arithmetic", duration: "20 min", completed: true },
-          { id: "hexadecimal", title: "Hexadecimal & Octal", duration: "18 min", completed: false },
-          { id: "floating-point", title: "Floating Point Representation", duration: "25 min", completed: false },
-        ],
-        progress: 50,
+        lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "number-systems"),
       },
       {
         id: "boolean-algebra",
         title: "Boolean Algebra & Logic",
-        lessons: [
-          { id: "logic-gates", title: "Logic Gates Fundamentals", duration: "20 min", completed: false },
-          { id: "truth-tables", title: "Truth Tables & Expressions", duration: "22 min", completed: false },
-          { id: "boolean-laws", title: "Boolean Laws & Simplification", duration: "25 min", completed: false },
-          { id: "circuit-design", title: "Digital Circuit Design", duration: "30 min", completed: false },
-        ],
-        progress: 0,
+        lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "boolean-algebra"),
       },
       {
         id: "set-theory",
         title: "Set Theory & Relations",
-        lessons: [
-          { id: "sets-intro", title: "Introduction to Sets", duration: "15 min", completed: false },
-          { id: "set-operations", title: "Set Operations", duration: "20 min", completed: false },
-          { id: "relations", title: "Relations & Functions", duration: "25 min", completed: false },
-        ],
-        progress: 0,
+        lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "set-theory"),
       },
     ],
   },
@@ -75,35 +59,19 @@ const tracks = [
     level: "Intermediate",
     modules: [
       {
-        id: "discrete-math",
-        title: "Discrete Mathematics",
-        lessons: [
-          { id: "counting", title: "Counting Principles", duration: "20 min", completed: false },
-          { id: "permutations", title: "Permutations & Combinations", duration: "25 min", completed: false },
-          { id: "recurrence", title: "Recurrence Relations", duration: "30 min", completed: false },
-        ],
-        progress: 0,
+        id: "linear-algebra",
+        title: "Linear Algebra",
+        lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "linear-algebra"),
       },
       {
-        id: "graph-theory",
-        title: "Graph Theory",
-        lessons: [
-          { id: "graphs-intro", title: "Introduction to Graphs", duration: "20 min", completed: false },
-          { id: "traversal", title: "Graph Traversal Algorithms", duration: "25 min", completed: false },
-          { id: "shortest-path", title: "Shortest Path Algorithms", duration: "30 min", completed: false },
-          { id: "trees", title: "Trees & Spanning Trees", duration: "25 min", completed: false },
-        ],
-        progress: 0,
+        id: "calculus",
+        title: "Calculus for Programming",
+        lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "calculus"),
       },
       {
-        id: "complexity",
-        title: "Complexity Analysis",
-        lessons: [
-          { id: "big-o", title: "Big O Notation", duration: "20 min", completed: false },
-          { id: "analyzing", title: "Analyzing Algorithms", duration: "25 min", completed: false },
-          { id: "space-complexity", title: "Space Complexity", duration: "20 min", completed: false },
-        ],
-        progress: 0,
+        id: "probability",
+        title: "Probability & Statistics",
+        lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "probability"),
       },
     ],
   },
@@ -118,31 +86,80 @@ const tracks = [
     level: "Advanced",
     modules: [
       {
-        id: "linear-algebra-adv",
-        title: "Advanced Linear Algebra",
-        lessons: [
-          { id: "eigenvalues", title: "Eigenvalues & Eigenvectors", duration: "30 min", completed: false },
-          { id: "svd", title: "Singular Value Decomposition", duration: "35 min", completed: false },
-          { id: "pca", title: "Principal Component Analysis", duration: "30 min", completed: false },
-        ],
-        progress: 0,
+        id: "fundamentals",
+        title: "ML Fundamentals",
+        lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "fundamentals"),
       },
       {
-        id: "optimization",
-        title: "Optimization",
-        lessons: [
-          { id: "gradient-descent", title: "Gradient Descent", duration: "25 min", completed: false },
-          { id: "convex", title: "Convex Optimization", duration: "30 min", completed: false },
-          { id: "backprop", title: "Backpropagation Math", duration: "35 min", completed: false },
-        ],
-        progress: 0,
+        id: "neural-networks",
+        title: "Neural Networks",
+        lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "neural-networks"),
+      },
+      {
+        id: "advanced",
+        title: "Advanced Topics",
+        lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "advanced"),
       },
     ],
   },
   {
-    id: "security",
+    id: "algorithms",
+    title: "Algorithms & Data Structures",
+    description: "Master algorithm design and analysis for efficient problem solving.",
+    icon: Cpu,
+    color: "bg-success",
+    textColor: "text-success",
+    borderColor: "border-success/30",
+    level: "Advanced",
+    modules: [
+      {
+        id: "complexity",
+        title: "Complexity Analysis",
+        lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "complexity"),
+      },
+      {
+        id: "searching",
+        title: "Searching Algorithms",
+        lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "searching"),
+      },
+      {
+        id: "sorting",
+        title: "Sorting Algorithms",
+        lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "sorting"),
+      },
+    ],
+  },
+  {
+    id: "networking",
+    title: "Networking & IoT",
+    description: "Network protocols, communication, and IoT fundamentals.",
+    icon: Network,
+    color: "bg-warning",
+    textColor: "text-warning",
+    borderColor: "border-warning/30",
+    level: "Advanced",
+    modules: [
+      {
+        id: "protocols",
+        title: "Network Protocols",
+        lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "protocols"),
+      },
+      {
+        id: "security",
+        title: "Network Security",
+        lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "security"),
+      },
+      {
+        id: "iot",
+        title: "IoT Communication",
+        lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "iot"),
+      },
+    ],
+  },
+  {
+    id: "cybersecurity",
     title: "Cybersecurity",
-    description: "Number theory and cryptographic mathematics for security professionals.",
+    description: "Security principles, authentication, and secure coding practices.",
     icon: Shield,
     color: "bg-destructive",
     textColor: "text-destructive",
@@ -150,36 +167,44 @@ const tracks = [
     level: "Advanced",
     modules: [
       {
-        id: "number-theory",
-        title: "Number Theory",
-        lessons: [
-          { id: "primes", title: "Prime Numbers & Factorization", duration: "25 min", completed: false },
-          { id: "modular", title: "Modular Arithmetic", duration: "30 min", completed: false },
-          { id: "gcd", title: "GCD & Extended Euclidean", duration: "25 min", completed: false },
-        ],
-        progress: 0,
+        id: "fundamentals",
+        title: "Security Fundamentals",
+        lessons: allLessons.filter(l => l.trackId === "cybersecurity" && l.moduleId === "fundamentals"),
       },
       {
-        id: "cryptography",
-        title: "Cryptographic Mathematics",
-        lessons: [
-          { id: "rsa", title: "RSA Algorithm", duration: "35 min", completed: false },
-          { id: "ecc", title: "Elliptic Curve Cryptography", duration: "40 min", completed: false },
-          { id: "hash", title: "Hash Functions", duration: "25 min", completed: false },
-        ],
-        progress: 0,
+        id: "web",
+        title: "Web Security",
+        lessons: allLessons.filter(l => l.trackId === "cybersecurity" && l.moduleId === "web"),
+      },
+    ],
+  },
+  {
+    id: "systems",
+    title: "System Architecture",
+    description: "Design scalable, reliable, and maintainable systems.",
+    icon: Server,
+    color: "bg-[hsl(280,85%,60%)]",
+    textColor: "text-[hsl(280,85%,60%)]",
+    borderColor: "border-[hsl(280,85%,60%)]/30",
+    level: "Advanced",
+    modules: [
+      {
+        id: "architecture",
+        title: "Architecture Patterns",
+        lessons: allLessons.filter(l => l.trackId === "systems" && l.moduleId === "architecture"),
       },
     ],
   },
 ];
 
 export default function Curriculum() {
-  const { isLessonCompleted, progress } = useProgress();
+  const { isLessonCompleted } = useProgress();
 
   // Calculate module progress based on completed lessons
-  const getModuleProgress = (trackId: string, moduleId: string, lessons: typeof tracks[0]["modules"][0]["lessons"]) => {
+  const getModuleProgress = (lessons: typeof allLessons) => {
+    if (lessons.length === 0) return 0;
     const completedCount = lessons.filter((lesson) =>
-      isLessonCompleted(`${trackId}/${moduleId}/${lesson.id}`)
+      isLessonCompleted(lesson.id)
     ).length;
     return Math.round((completedCount / lessons.length) * 100);
   };
@@ -236,8 +261,10 @@ export default function Curriculum() {
 
                 {/* Modules */}
                 <div className="divide-y divide-border/50">
-                  {track.modules.map((module, moduleIndex) => {
-                    const moduleProgress = getModuleProgress(track.id, module.id, module.lessons);
+                  {track.modules.map((module) => {
+                    const moduleProgress = getModuleProgress(module.lessons);
+                    if (module.lessons.length === 0) return null;
+                    
                     return (
                       <div key={module.id} className="p-6">
                         <div className="flex items-center justify-between mb-4">
@@ -252,13 +279,12 @@ export default function Curriculum() {
 
                         <div className="grid gap-2">
                           {module.lessons.map((lesson) => {
-                            const lessonId = `${track.id}/${module.id}/${lesson.id}`;
-                            const completed = isLessonCompleted(lessonId);
+                            const completed = isLessonCompleted(lesson.id);
                             
                             return (
                               <Link
                                 key={lesson.id}
-                                to={`/lesson/${track.id}/${module.id}/${lesson.id}`}
+                                to={`/lesson/${lesson.id}`}
                                 className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary/50 transition-colors group"
                               >
                                 <div className="flex items-center gap-3">
