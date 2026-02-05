@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { useProgress } from "@/hooks/useProgress";
 import { allLessons } from "@/data/lessons";
 
-// Build tracks from lesson data
+// Build tracks from lesson data - modules must match allLessons moduleId values exactly
 const tracks = [
   {
     id: "foundation",
