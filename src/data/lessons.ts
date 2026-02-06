@@ -2396,6 +2396,580 @@ def sanitize_for_html(user_input):
       { id: 3, question: "Event sourcing stores:", options: ["Current state only", "Events as source of truth", "No data", "Only deletes"], correct: 1 },
     ],
   },
+
+  // =========================================
+  // BLOCKCHAIN TRACK
+  // =========================================
+
+  "blockchain/fundamentals/blockchain-intro": {
+    title: "What is Blockchain?",
+    duration: "20 min",
+    xpReward: 100,
+    objectives: [
+      "Understand the concept of a distributed ledger",
+      "Explain how blocks are chained together",
+      "Recognize key properties: immutability, transparency, decentralization",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `A blockchain is a distributed, immutable ledger that records transactions across a network of computers. No single entity controls it, and once data is written, it cannot be altered without consensus from the network.`,
+      },
+      {
+        type: "concept",
+        title: "How Blocks Are Linked",
+        content: `Each block contains a hash of the previous block, creating an unbreakable chain. Changing any block would invalidate all subsequent hashes, making tampering detectable.`,
+      },
+      {
+        type: "math",
+        title: "Hash Function",
+        content: `A cryptographic hash maps arbitrary data to a fixed-size output:`,
+        formula: "H(\\text{block data}) \\rightarrow \\text{256-bit hash}",
+      },
+      {
+        type: "code",
+        title: "Simple Block in Python",
+        language: "python",
+        code: `import hashlib, json, time
+
+class Block:
+    def __init__(self, index, data, prev_hash):
+        self.index = index
+        self.timestamp = time.time()
+        self.data = data
+        self.prev_hash = prev_hash
+        self.hash = self.compute_hash()
+
+    def compute_hash(self):
+        block_str = json.dumps(self.__dict__, sort_keys=True)
+        return hashlib.sha256(block_str.encode()).hexdigest()`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "A blockchain is:", options: ["A centralized database", "A distributed ledger", "A programming language", "A cloud server"], correct: 1 },
+      { id: 2, question: "Each block contains:", options: ["Only transactions", "A hash of the next block", "A hash of the previous block", "No metadata"], correct: 2 },
+      { id: 3, question: "Immutability means:", options: ["Data can be changed freely", "Data cannot be altered once written", "Data is encrypted", "Data is deleted periodically"], correct: 1 },
+    ],
+  },
+
+  "blockchain/fundamentals/consensus": {
+    title: "Consensus Mechanisms",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Compare Proof of Work vs Proof of Stake",
+      "Understand the Byzantine Generals Problem",
+      "Evaluate energy and security tradeoffs",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Consensus mechanisms allow distributed networks to agree on the state of the ledger without a central authority. They solve the fundamental problem of trust in decentralized systems.`,
+      },
+      {
+        type: "concept",
+        title: "Proof of Work (PoW)",
+        content: `Miners compete to solve a computational puzzle. The first to find a valid hash gets to add the block and earn a reward. Secure but energy-intensive—Bitcoin uses PoW.`,
+      },
+      {
+        type: "concept",
+        title: "Proof of Stake (PoS)",
+        content: `Validators lock up tokens as collateral. They're selected to propose blocks based on stake size. Much more energy-efficient—Ethereum switched to PoS in 2022.`,
+      },
+      {
+        type: "math",
+        title: "Mining Difficulty",
+        content: `PoW requires finding a hash below a target value:`,
+        formula: "H(\\text{nonce} \\| \\text{block}) < \\text{target} \\quad \\text{where target} \\propto \\frac{1}{\\text{difficulty}}",
+      },
+    ],
+    practices: [
+      { id: 1, question: "Bitcoin uses:", options: ["Proof of Stake", "Proof of Work", "Proof of Authority", "No consensus"], correct: 1 },
+      { id: 2, question: "PoS is more:", options: ["Energy-intensive", "Energy-efficient", "Centralized", "Insecure"], correct: 1 },
+      { id: 3, question: "The Byzantine Generals Problem is about:", options: ["Military strategy", "Achieving consensus with untrusted parties", "Encryption", "Database design"], correct: 1 },
+    ],
+  },
+
+  "blockchain/smart-contracts/solidity-basics": {
+    title: "Smart Contracts & Solidity",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Understand what smart contracts are",
+      "Write basic Solidity code",
+      "Deploy and interact with contracts",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Smart contracts are self-executing programs stored on the blockchain. They automatically enforce rules and execute actions when conditions are met—no intermediary needed.`,
+      },
+      {
+        type: "concept",
+        title: "Why Smart Contracts?",
+        content: `Traditional contracts need lawyers and courts. Smart contracts execute automatically, are transparent, immutable, and trustless. They power DeFi, NFTs, and DAOs.`,
+      },
+      {
+        type: "code",
+        title: "Basic Solidity Contract",
+        language: "solidity",
+        code: `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleStorage {
+    uint256 private storedValue;
+    
+    event ValueChanged(uint256 newValue);
+    
+    function set(uint256 value) public {
+        storedValue = value;
+        emit ValueChanged(value);
+    }
+    
+    function get() public view returns (uint256) {
+        return storedValue;
+    }
+}`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Smart contracts run on:", options: ["Local servers", "The blockchain", "Cloud only", "User devices"], correct: 1 },
+      { id: 2, question: "Solidity is used for:", options: ["Bitcoin", "Ethereum smart contracts", "Web servers", "Machine learning"], correct: 1 },
+      { id: 3, question: "Smart contracts are:", options: ["Mutable", "Immutable once deployed", "Centralized", "Free to execute"], correct: 1 },
+    ],
+  },
+
+  "blockchain/smart-contracts/defi": {
+    title: "DeFi & Token Standards",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Understand ERC-20 and ERC-721 standards",
+      "Explore DeFi concepts: lending, AMMs, yield",
+      "Recognize risks in DeFi protocols",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Decentralized Finance (DeFi) rebuilds traditional financial services on blockchain. Lending, borrowing, trading, and insurance—all without banks or intermediaries.`,
+      },
+      {
+        type: "concept",
+        title: "Token Standards",
+        content: `ERC-20: fungible tokens (currencies, utility tokens). ERC-721: non-fungible tokens (NFTs, unique assets). ERC-1155: multi-token standard (gaming items). Standards ensure interoperability.`,
+      },
+      {
+        type: "code",
+        title: "ERC-20 Token",
+        language: "solidity",
+        code: `// Minimal ERC-20 interface
+interface IERC20 {
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+}`,
+      },
+      {
+        type: "concept",
+        title: "Automated Market Makers",
+        content: `AMMs like Uniswap replace order books with liquidity pools. Price is determined by a formula (x·y=k). Anyone can provide liquidity and earn fees.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "ERC-721 is for:", options: ["Fungible tokens", "Non-fungible tokens", "Stablecoins", "Gas fees"], correct: 1 },
+      { id: 2, question: "An AMM uses:", options: ["Order books", "Liquidity pools", "Central exchanges", "Banks"], correct: 1 },
+      { id: 3, question: "DeFi stands for:", options: ["Defined Finance", "Decentralized Finance", "Default Finance", "Deferred Finance"], correct: 1 },
+    ],
+  },
+
+  // =========================================
+  // IOT TRACK
+  // =========================================
+
+  "iot/fundamentals/iot-intro": {
+    title: "Introduction to IoT",
+    duration: "20 min",
+    xpReward: 100,
+    objectives: [
+      "Define the Internet of Things",
+      "Identify IoT components: sensors, actuators, gateways",
+      "Recognize IoT applications across industries",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `The Internet of Things connects physical devices to the internet, enabling them to collect and exchange data. From smart homes to industrial automation, IoT is transforming how we interact with the physical world.`,
+      },
+      {
+        type: "concept",
+        title: "IoT Architecture",
+        content: `Perception Layer (sensors/actuators) → Network Layer (communication) → Processing Layer (edge/cloud computing) → Application Layer (dashboards, automation). Each layer has unique challenges.`,
+      },
+      {
+        type: "concept",
+        title: "Common IoT Protocols",
+        content: `MQTT: lightweight pub/sub messaging. CoAP: REST-like for constrained devices. BLE: short-range low-power. LoRaWAN: long-range low-power. ZigBee: mesh networking for smart homes.`,
+      },
+      {
+        type: "code",
+        title: "Reading Sensor Data (Python)",
+        language: "python",
+        code: `import time
+import random
+
+class TemperatureSensor:
+    def __init__(self, sensor_id):
+        self.sensor_id = sensor_id
+    
+    def read(self):
+        # Simulate sensor reading
+        return {
+            "sensor_id": self.sensor_id,
+            "temperature": round(20 + random.gauss(0, 2), 1),
+            "timestamp": time.time(),
+            "unit": "celsius"
+        }
+
+sensor = TemperatureSensor("temp-001")
+reading = sensor.read()
+print(f"Temp: {reading['temperature']}°C")`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "IoT stands for:", options: ["Internet of Technology", "Internet of Things", "Integration of Tools", "Interface of Terminals"], correct: 1 },
+      { id: 2, question: "Sensors are part of which layer?", options: ["Application", "Network", "Perception", "Processing"], correct: 2 },
+      { id: 3, question: "MQTT is designed for:", options: ["High bandwidth video", "Lightweight IoT messaging", "File transfer", "Web browsing"], correct: 1 },
+    ],
+  },
+
+  "iot/fundamentals/sensors-actuators": {
+    title: "Sensors & Actuators",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Distinguish between analog and digital sensors",
+      "Interface with common sensor types",
+      "Control actuators based on sensor data",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Sensors convert physical phenomena into electrical signals; actuators convert electrical signals into physical actions. Together they form the bridge between digital systems and the physical world.`,
+      },
+      {
+        type: "concept",
+        title: "Common Sensor Types",
+        content: `Temperature (DHT22, DS18B20), Humidity, Light (LDR, photodiode), Motion (PIR, accelerometer), Distance (ultrasonic, LiDAR), Gas (MQ series). Each has different accuracy, range, and power needs.`,
+      },
+      {
+        type: "code",
+        title: "Sensor-Actuator Loop",
+        language: "python",
+        code: `class Thermostat:
+    def __init__(self, target_temp=22.0):
+        self.target = target_temp
+        self.heater_on = False
+
+    def update(self, current_temp):
+        if current_temp < self.target - 0.5:
+            self.heater_on = True
+            return "HEATING"
+        elif current_temp > self.target + 0.5:
+            self.heater_on = False
+            return "COOLING"
+        return "STABLE"
+
+thermostat = Thermostat(22.0)
+print(thermostat.update(20.0))  # HEATING`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "An actuator:", options: ["Reads data", "Converts signals to physical action", "Stores data", "Transmits wirelessly"], correct: 1 },
+      { id: 2, question: "ADC converts:", options: ["Digital to analog", "Analog to digital", "AC to DC", "Data to code"], correct: 1 },
+      { id: 3, question: "A PIR sensor detects:", options: ["Temperature", "Motion", "Light", "Sound"], correct: 1 },
+    ],
+  },
+
+  "iot/edge-computing/edge-intro": {
+    title: "Edge Computing",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand edge vs cloud computing",
+      "Identify when to process at the edge",
+      "Design edge computing architectures",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Edge computing processes data near the source instead of sending everything to the cloud. This reduces latency, bandwidth costs, and enables real-time decisions for IoT applications.`,
+      },
+      {
+        type: "concept",
+        title: "Why Edge Computing?",
+        content: `Latency: real-time decisions can't wait for cloud roundtrip. Bandwidth: sending all raw sensor data is expensive. Privacy: sensitive data stays local. Reliability: works even without internet.`,
+      },
+      {
+        type: "concept",
+        title: "Edge Architecture",
+        content: `Devices → Edge Gateway (filter, aggregate, local ML inference) → Cloud (long-term storage, training, analytics). Process locally what you can, send to cloud what you must.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Edge computing processes data:", options: ["In the cloud only", "Near the data source", "On user phones", "In data centers"], correct: 1 },
+      { id: 2, question: "Main benefit of edge for IoT:", options: ["More storage", "Lower latency", "Better graphics", "Cheaper hardware"], correct: 1 },
+      { id: 3, question: "Edge computing reduces:", options: ["Security", "Bandwidth to cloud", "Local processing", "Sensor accuracy"], correct: 1 },
+    ],
+  },
+
+  "iot/edge-computing/iot-security": {
+    title: "IoT Security",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Identify IoT-specific security threats",
+      "Implement device authentication",
+      "Apply encryption for IoT communication",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `IoT devices are attractive targets: they're often resource-constrained, deployed in physical locations, and connected to critical systems. Security must be designed in from the start.`,
+      },
+      {
+        type: "concept",
+        title: "IoT Threat Landscape",
+        content: `Device tampering, firmware attacks, man-in-the-middle, botnet recruitment (Mirai), default credentials, unencrypted communication. Each IoT device is a potential entry point.`,
+      },
+      {
+        type: "code",
+        title: "Secure MQTT with TLS",
+        language: "python",
+        code: `import paho.mqtt.client as mqtt
+import ssl
+
+client = mqtt.Client()
+
+# Enable TLS encryption
+client.tls_set(
+    ca_certs="ca.crt",
+    certfile="client.crt",
+    keyfile="client.key",
+    tls_version=ssl.PROTOCOL_TLSv1_2
+)
+
+# Authenticate
+client.username_pw_set("device_001", "secure_token")
+client.connect("iot-broker.example.com", 8883)`,
+      },
+      {
+        type: "concept",
+        title: "Security Best Practices",
+        content: `Unique credentials per device. Encrypted communication (TLS/DTLS). Secure boot. Regular firmware updates. Network segmentation. Principle of least privilege.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Mirai botnet targeted:", options: ["Servers", "IoT devices", "Phones", "Laptops"], correct: 1 },
+      { id: 2, question: "IoT devices should use:", options: ["Default passwords", "Unique credentials", "No authentication", "Shared passwords"], correct: 1 },
+      { id: 3, question: "Secure boot ensures:", options: ["Fast startup", "Only trusted firmware runs", "Wireless connectivity", "Low power usage"], correct: 1 },
+    ],
+  },
+
+  // =========================================
+  // BIG DATA TRACK
+  // =========================================
+
+  "bigdata/fundamentals/bigdata-intro": {
+    title: "Introduction to Big Data",
+    duration: "20 min",
+    xpReward: 100,
+    objectives: [
+      "Define Big Data and the 5 Vs",
+      "Understand distributed computing concepts",
+      "Recognize Big Data use cases",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Big Data refers to datasets too large or complex for traditional tools. It's characterized by the 5 Vs: Volume, Velocity, Variety, Veracity, and Value. Processing it requires distributed systems.`,
+      },
+      {
+        type: "concept",
+        title: "The 5 Vs of Big Data",
+        content: `Volume: terabytes to petabytes. Velocity: real-time streaming data. Variety: structured, semi-structured, unstructured. Veracity: data quality and accuracy. Value: extracting actionable insights.`,
+      },
+      {
+        type: "concept",
+        title: "Distributed Computing",
+        content: `Single machines can't handle Big Data. Distributed systems split work across clusters. Key frameworks: Hadoop (batch), Spark (batch + streaming), Flink (real-time streaming).`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "The 5 Vs include:", options: ["Volume, Velocity, Variety", "Version, Value, Virtual", "Vector, Volume, Visual", "Variable, Velocity, Void"], correct: 0 },
+      { id: 2, question: "Big Data requires:", options: ["Single powerful server", "Distributed computing", "Only cloud storage", "No special tools"], correct: 1 },
+      { id: 3, question: "Apache Spark is used for:", options: ["Web hosting", "Big Data processing", "Mobile apps", "Email"], correct: 1 },
+    ],
+  },
+
+  "bigdata/fundamentals/mapreduce": {
+    title: "MapReduce Paradigm",
+    duration: "25 min",
+    xpReward: 120,
+    objectives: [
+      "Understand the Map and Reduce operations",
+      "Implement MapReduce for common tasks",
+      "Recognize when MapReduce applies",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `MapReduce is a programming model for processing large datasets in parallel. Map transforms data into key-value pairs; Reduce aggregates values by key. It's the foundation of distributed data processing.`,
+      },
+      {
+        type: "concept",
+        title: "How MapReduce Works",
+        content: `1. Split: data divided across nodes. 2. Map: each node processes its chunk, emitting key-value pairs. 3. Shuffle: pairs grouped by key. 4. Reduce: aggregate values per key. Parallelism is automatic.`,
+      },
+      {
+        type: "code",
+        title: "Word Count with MapReduce",
+        language: "python",
+        code: `from collections import defaultdict
+
+def map_function(document):
+    """Emit (word, 1) for each word"""
+    pairs = []
+    for word in document.lower().split():
+        pairs.append((word, 1))
+    return pairs
+
+def reduce_function(key, values):
+    """Sum all counts for each word"""
+    return (key, sum(values))
+
+# Simulate MapReduce
+doc = "hello world hello big data world"
+mapped = map_function(doc)
+
+# Shuffle phase
+groups = defaultdict(list)
+for key, value in mapped:
+    groups[key].append(value)
+
+# Reduce phase
+results = [reduce_function(k, v) for k, v in groups.items()]
+print(results)  # [('hello', 2), ('world', 2), ('big', 1), ('data', 1)]`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Map phase produces:", options: ["Aggregated results", "Key-value pairs", "Sorted data", "Filtered rows"], correct: 1 },
+      { id: 2, question: "Reduce phase does:", options: ["Splits data", "Aggregates by key", "Stores to disk", "Sorts alphabetically"], correct: 1 },
+      { id: 3, question: "MapReduce was popularized by:", options: ["Facebook", "Google", "Amazon", "Microsoft"], correct: 1 },
+    ],
+  },
+
+  "bigdata/processing/spark-intro": {
+    title: "Apache Spark",
+    duration: "30 min",
+    xpReward: 140,
+    objectives: [
+      "Understand Spark's in-memory processing",
+      "Work with RDDs and DataFrames",
+      "Compare Spark vs Hadoop MapReduce",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Apache Spark processes data up to 100x faster than Hadoop MapReduce by keeping data in memory. It supports batch processing, streaming, ML, and graph computation in a unified engine.`,
+      },
+      {
+        type: "concept",
+        title: "Spark Architecture",
+        content: `Driver Program → Cluster Manager → Worker Nodes. Data is organized as RDDs (Resilient Distributed Datasets) or DataFrames. Lazy evaluation: transformations build a plan, actions trigger execution.`,
+      },
+      {
+        type: "code",
+        title: "PySpark Example",
+        language: "python",
+        code: `from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("BigDataDemo").getOrCreate()
+
+# Read data
+df = spark.read.csv("sales.csv", header=True, inferSchema=True)
+
+# Transformations (lazy)
+result = (df
+    .groupBy("category")
+    .agg({"revenue": "sum", "quantity": "avg"})
+    .orderBy("sum(revenue)", ascending=False))
+
+# Action (triggers execution)
+result.show()`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "Spark is faster than MapReduce because:", options: ["Better algorithms", "In-memory processing", "Newer hardware", "Simpler code"], correct: 1 },
+      { id: 2, question: "Spark transformations are:", options: ["Eagerly evaluated", "Lazily evaluated", "Never evaluated", "Randomly evaluated"], correct: 1 },
+      { id: 3, question: "An RDD stands for:", options: ["Random Data Distribution", "Resilient Distributed Dataset", "Real-time Data Driver", "Reduced Data Dimension"], correct: 1 },
+    ],
+  },
+
+  "bigdata/processing/data-pipelines": {
+    title: "Data Pipelines & ETL",
+    duration: "25 min",
+    xpReward: 130,
+    objectives: [
+      "Design Extract-Transform-Load workflows",
+      "Understand batch vs streaming pipelines",
+      "Apply data quality checks",
+    ],
+    sections: [
+      {
+        type: "text",
+        content: `Data pipelines move and transform data from sources to destinations. ETL (Extract, Transform, Load) is the classic pattern, while modern approaches often use ELT with data warehouses.`,
+      },
+      {
+        type: "concept",
+        title: "Batch vs Streaming",
+        content: `Batch: process data in scheduled chunks (hourly/daily). Good for reports, analytics. Streaming: process data as it arrives. Good for real-time dashboards, alerts, fraud detection.`,
+      },
+      {
+        type: "code",
+        title: "Simple ETL Pipeline",
+        language: "python",
+        code: `import pandas as pd
+
+# Extract
+raw_data = pd.read_csv("raw_events.csv")
+
+# Transform
+cleaned = (raw_data
+    .dropna(subset=["user_id", "event_type"])
+    .assign(
+        event_date=lambda df: pd.to_datetime(df["timestamp"]).dt.date,
+        event_type=lambda df: df["event_type"].str.lower()
+    )
+    .query("event_type in ['click', 'purchase', 'view']"))
+
+# Load
+cleaned.to_parquet("processed_events.parquet", index=False)
+print(f"Processed {len(cleaned)} / {len(raw_data)} events")`,
+      },
+      {
+        type: "concept",
+        title: "Data Quality",
+        content: `Validate completeness (no missing fields), accuracy (correct values), consistency (matching across sources), timeliness (fresh data). Build checks into every pipeline stage.`,
+      },
+    ],
+    practices: [
+      { id: 1, question: "ETL stands for:", options: ["Edit Transfer Load", "Extract Transform Load", "Evaluate Test Log", "Export Transpose Link"], correct: 1 },
+      { id: 2, question: "Streaming pipelines process:", options: ["Data in batches", "Data as it arrives", "Only files", "Only databases"], correct: 1 },
+      { id: 3, question: "Data quality checks should be:", options: ["Optional", "At the end only", "At every stage", "Only for production"], correct: 2 },
+    ],
+  },
 };
 
 // Get all lessons in order for navigation
@@ -2470,6 +3044,24 @@ export const allLessons: LessonMetadata[] = [
   { id: "systems/architecture/scalability", title: "Scalability Patterns", duration: "30 min", trackId: "systems", moduleId: "architecture", trackTitle: "System Architecture" },
   { id: "systems/architecture/reliability", title: "Reliability & Resilience", duration: "30 min", trackId: "systems", moduleId: "architecture", trackTitle: "System Architecture" },
   { id: "systems/architecture/event-driven", title: "Event-Driven Architecture", duration: "30 min", trackId: "systems", moduleId: "architecture", trackTitle: "System Architecture" },
+
+  // Blockchain
+  { id: "blockchain/fundamentals/blockchain-intro", title: "What is Blockchain?", duration: "20 min", trackId: "blockchain", moduleId: "fundamentals", trackTitle: "Blockchain" },
+  { id: "blockchain/fundamentals/consensus", title: "Consensus Mechanisms", duration: "25 min", trackId: "blockchain", moduleId: "fundamentals", trackTitle: "Blockchain" },
+  { id: "blockchain/smart-contracts/solidity-basics", title: "Smart Contracts & Solidity", duration: "30 min", trackId: "blockchain", moduleId: "smart-contracts", trackTitle: "Blockchain" },
+  { id: "blockchain/smart-contracts/defi", title: "DeFi & Token Standards", duration: "25 min", trackId: "blockchain", moduleId: "smart-contracts", trackTitle: "Blockchain" },
+
+  // IoT
+  { id: "iot/fundamentals/iot-intro", title: "Introduction to IoT", duration: "20 min", trackId: "iot", moduleId: "fundamentals", trackTitle: "IoT" },
+  { id: "iot/fundamentals/sensors-actuators", title: "Sensors & Actuators", duration: "25 min", trackId: "iot", moduleId: "fundamentals", trackTitle: "IoT" },
+  { id: "iot/edge-computing/edge-intro", title: "Edge Computing", duration: "25 min", trackId: "iot", moduleId: "edge-computing", trackTitle: "IoT" },
+  { id: "iot/edge-computing/iot-security", title: "IoT Security", duration: "30 min", trackId: "iot", moduleId: "edge-computing", trackTitle: "IoT" },
+
+  // Big Data
+  { id: "bigdata/fundamentals/bigdata-intro", title: "Introduction to Big Data", duration: "20 min", trackId: "bigdata", moduleId: "fundamentals", trackTitle: "Big Data" },
+  { id: "bigdata/fundamentals/mapreduce", title: "MapReduce Paradigm", duration: "25 min", trackId: "bigdata", moduleId: "fundamentals", trackTitle: "Big Data" },
+  { id: "bigdata/processing/spark-intro", title: "Apache Spark", duration: "30 min", trackId: "bigdata", moduleId: "processing", trackTitle: "Big Data" },
+  { id: "bigdata/processing/data-pipelines", title: "Data Pipelines & ETL", duration: "25 min", trackId: "bigdata", moduleId: "processing", trackTitle: "Big Data" },
 ];
 
 // Helper to get next uncompleted lesson

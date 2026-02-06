@@ -13,7 +13,10 @@ import {
   Clock,
   CheckCircle2,
   Server,
-  Cpu
+  Cpu,
+  Link as LinkIcon,
+  Radio,
+  Database
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProgress } from "@/hooks/useProgress";
@@ -31,21 +34,9 @@ const tracks = [
     borderColor: "border-primary/30",
     level: "Beginner",
     modules: [
-      {
-        id: "number-systems",
-        title: "Number Systems & Binary",
-        lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "number-systems"),
-      },
-      {
-        id: "boolean-algebra",
-        title: "Boolean Algebra & Logic",
-        lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "boolean-algebra"),
-      },
-      {
-        id: "set-theory",
-        title: "Set Theory & Relations",
-        lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "set-theory"),
-      },
+      { id: "number-systems", title: "Number Systems & Binary", lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "number-systems") },
+      { id: "boolean-algebra", title: "Boolean Algebra & Logic", lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "boolean-algebra") },
+      { id: "set-theory", title: "Set Theory & Relations", lessons: allLessons.filter(l => l.trackId === "foundation" && l.moduleId === "set-theory") },
     ],
   },
   {
@@ -58,21 +49,9 @@ const tracks = [
     borderColor: "border-accent/30",
     level: "Intermediate",
     modules: [
-      {
-        id: "linear-algebra",
-        title: "Linear Algebra",
-        lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "linear-algebra"),
-      },
-      {
-        id: "calculus",
-        title: "Calculus for Programming",
-        lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "calculus"),
-      },
-      {
-        id: "probability",
-        title: "Probability & Statistics",
-        lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "probability"),
-      },
+      { id: "linear-algebra", title: "Linear Algebra", lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "linear-algebra") },
+      { id: "calculus", title: "Calculus for Programming", lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "calculus") },
+      { id: "probability", title: "Probability & Statistics", lessons: allLessons.filter(l => l.trackId === "core" && l.moduleId === "probability") },
     ],
   },
   {
@@ -85,21 +64,9 @@ const tracks = [
     borderColor: "border-[hsl(330,85%,60%)]/30",
     level: "Advanced",
     modules: [
-      {
-        id: "fundamentals",
-        title: "ML Fundamentals",
-        lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "fundamentals"),
-      },
-      {
-        id: "neural-networks",
-        title: "Neural Networks",
-        lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "neural-networks"),
-      },
-      {
-        id: "advanced",
-        title: "Advanced Topics",
-        lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "advanced"),
-      },
+      { id: "fundamentals", title: "ML Fundamentals", lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "fundamentals") },
+      { id: "neural-networks", title: "Neural Networks", lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "neural-networks") },
+      { id: "advanced", title: "Advanced Topics", lessons: allLessons.filter(l => l.trackId === "ml-ai" && l.moduleId === "advanced") },
     ],
   },
   {
@@ -112,48 +79,24 @@ const tracks = [
     borderColor: "border-success/30",
     level: "Advanced",
     modules: [
-      {
-        id: "complexity",
-        title: "Complexity Analysis",
-        lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "complexity"),
-      },
-      {
-        id: "searching",
-        title: "Searching Algorithms",
-        lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "searching"),
-      },
-      {
-        id: "sorting",
-        title: "Sorting Algorithms",
-        lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "sorting"),
-      },
+      { id: "complexity", title: "Complexity Analysis", lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "complexity") },
+      { id: "searching", title: "Searching Algorithms", lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "searching") },
+      { id: "sorting", title: "Sorting Algorithms", lessons: allLessons.filter(l => l.trackId === "algorithms" && l.moduleId === "sorting") },
     ],
   },
   {
     id: "networking",
-    title: "Networking & IoT",
-    description: "Network protocols, communication, and IoT fundamentals.",
+    title: "Networking",
+    description: "Network protocols, communication, and web fundamentals.",
     icon: Network,
     color: "bg-warning",
     textColor: "text-warning",
     borderColor: "border-warning/30",
-    level: "Advanced",
+    level: "Intermediate",
     modules: [
-      {
-        id: "protocols",
-        title: "Network Protocols",
-        lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "protocols"),
-      },
-      {
-        id: "security",
-        title: "Network Security",
-        lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "security"),
-      },
-      {
-        id: "iot",
-        title: "IoT Communication",
-        lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "iot"),
-      },
+      { id: "protocols", title: "Network Protocols", lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "protocols") },
+      { id: "security", title: "Network Security", lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "security") },
+      { id: "iot", title: "IoT Communication", lessons: allLessons.filter(l => l.trackId === "networking" && l.moduleId === "iot") },
     ],
   },
   {
@@ -166,16 +109,8 @@ const tracks = [
     borderColor: "border-destructive/30",
     level: "Advanced",
     modules: [
-      {
-        id: "fundamentals",
-        title: "Security Fundamentals",
-        lessons: allLessons.filter(l => l.trackId === "cybersecurity" && l.moduleId === "fundamentals"),
-      },
-      {
-        id: "web",
-        title: "Web Security",
-        lessons: allLessons.filter(l => l.trackId === "cybersecurity" && l.moduleId === "web"),
-      },
+      { id: "fundamentals", title: "Security Fundamentals", lessons: allLessons.filter(l => l.trackId === "cybersecurity" && l.moduleId === "fundamentals") },
+      { id: "web", title: "Web Security", lessons: allLessons.filter(l => l.trackId === "cybersecurity" && l.moduleId === "web") },
     ],
   },
   {
@@ -188,11 +123,49 @@ const tracks = [
     borderColor: "border-[hsl(280,85%,60%)]/30",
     level: "Advanced",
     modules: [
-      {
-        id: "architecture",
-        title: "Architecture Patterns",
-        lessons: allLessons.filter(l => l.trackId === "systems" && l.moduleId === "architecture"),
-      },
+      { id: "architecture", title: "Architecture Patterns", lessons: allLessons.filter(l => l.trackId === "systems" && l.moduleId === "architecture") },
+    ],
+  },
+  {
+    id: "blockchain",
+    title: "Blockchain",
+    description: "Distributed ledgers, smart contracts, and decentralized applications.",
+    icon: LinkIcon,
+    color: "bg-[hsl(200,85%,50%)]",
+    textColor: "text-[hsl(200,85%,50%)]",
+    borderColor: "border-[hsl(200,85%,50%)]/30",
+    level: "Advanced",
+    modules: [
+      { id: "fundamentals", title: "Blockchain Fundamentals", lessons: allLessons.filter(l => l.trackId === "blockchain" && l.moduleId === "fundamentals") },
+      { id: "smart-contracts", title: "Smart Contracts & DeFi", lessons: allLessons.filter(l => l.trackId === "blockchain" && l.moduleId === "smart-contracts") },
+    ],
+  },
+  {
+    id: "iot",
+    title: "Internet of Things",
+    description: "Sensors, edge computing, and connected device ecosystems.",
+    icon: Radio,
+    color: "bg-[hsl(160,70%,45%)]",
+    textColor: "text-[hsl(160,70%,45%)]",
+    borderColor: "border-[hsl(160,70%,45%)]/30",
+    level: "Intermediate",
+    modules: [
+      { id: "fundamentals", title: "IoT Fundamentals", lessons: allLessons.filter(l => l.trackId === "iot" && l.moduleId === "fundamentals") },
+      { id: "edge-computing", title: "Edge Computing & Security", lessons: allLessons.filter(l => l.trackId === "iot" && l.moduleId === "edge-computing") },
+    ],
+  },
+  {
+    id: "bigdata",
+    title: "Big Data",
+    description: "Distributed data processing, pipelines, and large-scale analytics.",
+    icon: Database,
+    color: "bg-[hsl(30,85%,55%)]",
+    textColor: "text-[hsl(30,85%,55%)]",
+    borderColor: "border-[hsl(30,85%,55%)]/30",
+    level: "Advanced",
+    modules: [
+      { id: "fundamentals", title: "Big Data Fundamentals", lessons: allLessons.filter(l => l.trackId === "bigdata" && l.moduleId === "fundamentals") },
+      { id: "processing", title: "Data Processing", lessons: allLessons.filter(l => l.trackId === "bigdata" && l.moduleId === "processing") },
     ],
   },
 ];

@@ -25,13 +25,16 @@ import { useAuth } from "@/hooks/useAuth";
 import { getNextLesson, allLessons } from "@/data/lessons";
 
 const trackProgress = [
-  { name: "Foundation", total: 11, prefix: "foundation", color: "bg-primary" },
+  { name: "Foundation", total: 9, prefix: "foundation", color: "bg-primary" },
   { name: "Core Programming", total: 12, prefix: "core", color: "bg-accent" },
   { name: "ML & AI", total: 12, prefix: "ml-ai", color: "bg-[hsl(330,85%,60%)]" },
-  { name: "Algorithms", total: 12, prefix: "algorithms", color: "bg-success" },
-  { name: "Networking", total: 8, prefix: "networking", color: "bg-warning" },
-  { name: "Cybersecurity", total: 8, prefix: "cybersecurity", color: "bg-destructive" },
-  { name: "System Architecture", total: 8, prefix: "systems", color: "bg-[hsl(280,85%,60%)]" },
+  { name: "Algorithms", total: 6, prefix: "algorithms", color: "bg-success" },
+  { name: "Networking", total: 4, prefix: "networking", color: "bg-warning" },
+  { name: "Cybersecurity", total: 4, prefix: "cybersecurity", color: "bg-destructive" },
+  { name: "System Architecture", total: 4, prefix: "systems", color: "bg-[hsl(280,85%,60%)]" },
+  { name: "Blockchain", total: 4, prefix: "blockchain", color: "bg-[hsl(200,85%,50%)]" },
+  { name: "IoT", total: 4, prefix: "iot", color: "bg-[hsl(160,70%,45%)]" },
+  { name: "Big Data", total: 4, prefix: "bigdata", color: "bg-[hsl(30,85%,55%)]" },
 ];
 
 export default function Dashboard() {
