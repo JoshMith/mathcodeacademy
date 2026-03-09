@@ -51,12 +51,12 @@ function SectionRenderer({ section }: { section: LessonSection }) {
       );
     case "concept":
       return (
-        <div className="p-5 rounded-xl bg-accent/10 border border-accent/20">
+        <div className="p-4 sm:p-5 rounded-xl bg-accent/10 border border-accent/20 min-w-0">
           <div className="flex items-center gap-2 text-accent font-medium mb-3">
-            <Lightbulb className="h-5 w-5" />
-            {section.title}
+            <Lightbulb className="h-5 w-5 shrink-0" />
+            <span className="break-words">{section.title}</span>
           </div>
-          <p className="text-muted-foreground">{section.content}</p>
+          <p className="text-muted-foreground break-words">{section.content}</p>
         </div>
       );
     case "math":
