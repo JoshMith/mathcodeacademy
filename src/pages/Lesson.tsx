@@ -45,64 +45,66 @@ function SectionRenderer({ section }: { section: LessonSection }) {
   switch (section.type) {
     case "text":
       return (
-        <p className="text-lg leading-relaxed text-muted-foreground">
+        <p className="text-lg leading-relaxed text-muted-foreground break-words">
           {section.content}
         </p>
       );
     case "concept":
       return (
-        <div className="p-5 rounded-xl bg-accent/10 border border-accent/20">
+        <div className="p-4 sm:p-5 rounded-xl bg-accent/10 border border-accent/20 min-w-0">
           <div className="flex items-center gap-2 text-accent font-medium mb-3">
-            <Lightbulb className="h-5 w-5" />
-            {section.title}
+            <Lightbulb className="h-5 w-5 shrink-0" />
+            <span className="break-words">{section.title}</span>
           </div>
-          <p className="text-muted-foreground">{section.content}</p>
+          <p className="text-muted-foreground break-words">{section.content}</p>
         </div>
       );
     case "math":
       return (
-        <div className="p-5 rounded-xl glass-card">
-          <h3 className="font-display font-semibold text-lg mb-3">{section.title}</h3>
-          <p className="text-muted-foreground mb-4">{section.content}</p>
-          <div className="p-4 rounded-lg bg-background/50 text-center">
+        <div className="p-4 sm:p-5 rounded-xl glass-card min-w-0">
+          <h3 className="font-display font-semibold text-lg mb-3 break-words">{section.title}</h3>
+          <p className="text-muted-foreground mb-4 break-words">{section.content}</p>
+          <div className="p-2 sm:p-4 rounded-lg bg-background/50 text-center overflow-x-auto">
             <MathBlock math={section.formula || ""} display />
           </div>
         </div>
       );
     case "code":
       return (
-        <div className="rounded-xl overflow-hidden border border-border">
-          <div className="flex items-center gap-2 px-4 py-3 bg-secondary/50 border-b border-border">
-            <Code className="h-4 w-4 text-primary" />
-            <span className="font-medium text-sm">{section.title}</span>
-            <Badge variant="outline" className="ml-auto text-xs">
+        <div className="rounded-xl overflow-hidden border border-border min-w-0">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-3 bg-secondary/50 border-b border-border">
+            <Code className="h-4 w-4 text-primary shrink-0" />
+            <span className="font-medium text-sm truncate">{section.title}</span>
+            <Badge variant="outline" className="ml-auto text-xs shrink-0">
               {section.language}
             </Badge>
           </div>
-          <pre className="p-4 overflow-x-auto bg-[hsl(222,47%,5%)]">
-            <code className="font-mono text-sm text-foreground/90">
-              {section.code}
-            </code>
-          </pre>
+          <div className="overflow-x-auto">
+            <pre className="p-3 sm:p-4 bg-[hsl(222,47%,5%)]">
+              <code className="font-mono text-sm text-foreground/90">
+                {section.code}
+              </code>
+            </pre>
+          </div>
         </div>
       );
     case "example":
       return (
-        <div className="p-5 rounded-xl bg-success/5 border border-success/20">
+        <div className="p-4 sm:p-5 rounded-xl bg-success/5 border border-success/20 min-w-0">
           <div className="flex items-center gap-2 text-success font-medium mb-3">
-            <BookOpen className="h-5 w-5" />
-            {section.title}
+            <BookOpen className="h-5 w-5 shrink-0" />
+            <span className="break-words">{section.title}</span>
           </div>
-          <div className="mb-3">
+          <div className="mb-3 break-words">
             <span className="font-medium">Problem: </span>
             <span className="text-muted-foreground">{section.problem}</span>
           </div>
-          <div className="p-4 rounded-lg bg-background/50 mb-3">
-            <pre className="text-sm text-muted-foreground whitespace-pre-wrap">
+          <div className="p-3 sm:p-4 rounded-lg bg-background/50 mb-3 overflow-x-auto">
+            <pre className="text-sm text-muted-foreground whitespace-pre-wrap break-words">
               {section.solution}
             </pre>
           </div>
-          <div className="text-center p-3 rounded-lg bg-success/10">
+          <div className="text-center p-2 sm:p-3 rounded-lg bg-success/10 overflow-x-auto">
             <MathBlock math={section.formula || ""} display />
           </div>
         </div>
@@ -219,7 +221,7 @@ export default function Lesson() {
     : null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Navbar />
       
       {/* Progress Bar */}
@@ -242,20 +244,20 @@ export default function Lesson() {
             
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <Badge variant="outline" className="text-primary">{trackTitle}</Badge>
-                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                  <Badge variant="outline" className="text-primary shrink-0">{trackTitle}</Badge>
+                  <span className="text-sm text-muted-foreground flex items-center gap-1 shrink-0">
                     <Clock className="h-4 w-4" />
                     {lessonContent.duration}
                   </span>
                   {alreadyCompleted && (
-                    <Badge variant="outline" className="text-success border-success/30">
+                    <Badge variant="outline" className="text-success border-success/30 shrink-0">
                       <CheckCircle2 className="h-3 w-3 mr-1" />
                       Completed
                     </Badge>
                   )}
                 </div>
-                <h1 className="font-display text-3xl font-bold">{lessonContent.title}</h1>
+                <h1 className="font-display text-2xl sm:text-3xl font-bold break-words">{lessonContent.title}</h1>
               </div>
             </div>
 
@@ -314,8 +316,8 @@ export default function Lesson() {
                   <SectionRenderer key={index} section={section} />
                 ))}
 
-                {/* Navigation */}
-                <div className="flex items-center justify-between pt-8 border-t border-border/50">
+            {/* Navigation */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border/50">
                   <Link to="/curriculum">
                     <Button variant="outline">
                       <ArrowLeft className="h-4 w-4 mr-2" />
@@ -343,12 +345,12 @@ export default function Lesson() {
                 </div>
 
                 {lessonContent.practices.map((question, qIndex) => (
-                  <div key={question.id} className="glass-card rounded-xl p-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                  <div key={question.id} className="glass-card rounded-xl p-4 sm:p-6 min-w-0">
+                    <div className="flex items-start gap-2 mb-4">
+                      <span className="flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary text-sm font-medium shrink-0">
                         {qIndex + 1}
                       </span>
-                      <h3 className="font-medium">{question.question}</h3>
+                      <h3 className="font-medium break-words">{question.question}</h3>
                     </div>
 
                     <div className="grid gap-2">
@@ -383,7 +385,7 @@ export default function Lesson() {
                   </div>
                 ))}
 
-                <div className="flex items-center justify-between pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
                   <Button variant="outline" onClick={goBackToContent}>
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to Lesson
@@ -419,7 +421,7 @@ export default function Lesson() {
                           Lesson completed
                         </p>
                       )}
-                      <div className="flex gap-3">
+                      <div className="flex flex-wrap gap-3 justify-center">
                         {nextLesson && (
                           <Link to={`/lesson/${nextLesson.id}`}>
                             <Button variant="hero" size="lg">
