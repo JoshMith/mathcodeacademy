@@ -45,7 +45,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
   switch (section.type) {
     case "text":
       return (
-        <p className="text-lg leading-relaxed text-muted-foreground">
+        <p className="text-lg leading-relaxed text-muted-foreground break-words">
           {section.content}
         </p>
       );
