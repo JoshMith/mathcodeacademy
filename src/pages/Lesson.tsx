@@ -84,24 +84,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
         </div>
       );
     case "code":
-      return (
-        <div className="rounded-xl overflow-hidden border border-border min-w-0">
-          <div className="flex items-center gap-2 px-3 sm:px-4 py-3 bg-secondary/50 border-b border-border">
-            <Code className="h-4 w-4 text-primary shrink-0" />
-            <span className="font-medium text-sm truncate">{section.title}</span>
-            <Badge variant="outline" className="ml-auto text-xs shrink-0">
-              {section.language}
-            </Badge>
-          </div>
-          <div className="overflow-x-auto">
-            <pre className="p-3 sm:p-4 bg-[hsl(222,47%,5%)]">
-              <code className="font-mono text-sm text-foreground/90">
-                {section.code}
-              </code>
-            </pre>
-          </div>
-        </div>
-      );
+      return <CodeBlock title={section.title} language={section.language} code={section.code || ""} />;
     case "example":
       return (
         <div className="p-4 sm:p-5 rounded-xl bg-success/5 border border-success/20 min-w-0">
