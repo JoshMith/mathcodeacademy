@@ -28,6 +28,8 @@ import {
   CheckCircle2, 
   Clock, 
   Code,
+  Copy,
+  Check,
   Lightbulb,
   Play,
   Target,
@@ -57,6 +59,7 @@ function MathBlock({ math, display = false }: { math: string; display?: boolean 
 // Syntax-highlighted code block
 function CodeBlock({ title, language, code }: { title?: string; language?: string; code: string }) {
   const codeRef = useRef<HTMLElement>(null);
+  const [copied, setCopied] = useState(false);
   const lang = (language || "").toLowerCase();
   const prismLang = Prism.languages[lang] ? lang : "javascript";
 
@@ -66,6 +69,12 @@ function CodeBlock({ title, language, code }: { title?: string; language?: strin
     }
   }, [code, prismLang]);
 
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="rounded-xl overflow-hidden border border-border min-w-0">
       <div className="flex items-center gap-2 px-3 sm:px-4 py-3 bg-secondary/50 border-b border-border">
@@ -74,6 +83,13 @@ function CodeBlock({ title, language, code }: { title?: string; language?: strin
         <Badge variant="outline" className="ml-auto text-xs shrink-0">
           {language}
         </Badge>
+        <button
+          onClick={handleCopy}
+          className="p-1.5 rounded-md hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground shrink-0"
+          title="Copy code"
+        >
+          {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
+        </button>
       </div>
       <div className="overflow-x-auto">
         <pre className="p-3 sm:p-4 !bg-[hsl(222,47%,5%)] !m-0">
