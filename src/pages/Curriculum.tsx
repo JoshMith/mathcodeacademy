@@ -240,10 +240,10 @@ export default function Curriculum() {
                     
                     return (
                       <div key={module.id} className="p-6">
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                           <h3 className="font-display font-semibold text-lg">{module.title}</h3>
-                          <div className="flex items-center gap-3">
-                            <span className="text-sm text-muted-foreground">
+                          <div className="flex items-center gap-3 shrink-0">
+                            <span className="text-sm text-muted-foreground whitespace-nowrap">
                               {moduleProgress}% complete
                             </span>
                             <Progress value={moduleProgress} className="w-24 h-2" />
