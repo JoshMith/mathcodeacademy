@@ -244,20 +244,20 @@ export default function Lesson() {
             
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <Badge variant="outline" className="text-primary">{trackTitle}</Badge>
-                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                  <Badge variant="outline" className="text-primary shrink-0">{trackTitle}</Badge>
+                  <span className="text-sm text-muted-foreground flex items-center gap-1 shrink-0">
                     <Clock className="h-4 w-4" />
                     {lessonContent.duration}
                   </span>
                   {alreadyCompleted && (
-                    <Badge variant="outline" className="text-success border-success/30">
+                    <Badge variant="outline" className="text-success border-success/30 shrink-0">
                       <CheckCircle2 className="h-3 w-3 mr-1" />
                       Completed
                     </Badge>
                   )}
                 </div>
-                <h1 className="font-display text-3xl font-bold">{lessonContent.title}</h1>
+                <h1 className="font-display text-2xl sm:text-3xl font-bold break-words">{lessonContent.title}</h1>
               </div>
             </div>
 
