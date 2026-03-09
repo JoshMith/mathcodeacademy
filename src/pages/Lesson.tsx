@@ -421,7 +421,7 @@ export default function Lesson() {
                           Lesson completed
                         </p>
                       )}
-                      <div className="flex gap-3">
+                      <div className="flex flex-wrap gap-3 justify-center">
                         {nextLesson && (
                           <Link to={`/lesson/${nextLesson.id}`}>
                             <Button variant="hero" size="lg">
