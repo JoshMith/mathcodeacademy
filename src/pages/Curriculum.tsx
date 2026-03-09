@@ -258,20 +258,20 @@ export default function Curriculum() {
                               <Link
                                 key={lesson.id}
                                 to={`/lesson/${lesson.id}`}
-                                className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary/50 transition-colors group"
+                                className="flex items-center gap-3 p-3 rounded-lg hover:bg-secondary/50 transition-colors group min-w-0"
                               >
-                                <div className="flex items-center gap-3">
+                                <div className="shrink-0">
                                   {completed ? (
                                     <CheckCircle2 className="h-5 w-5 text-success" />
                                   ) : (
                                     <div className="h-5 w-5 rounded-full border-2 border-muted-foreground/30" />
                                   )}
-                                  <span className={completed ? "text-muted-foreground" : ""}>
-                                    {lesson.title}
-                                  </span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                                <span className={`min-w-0 break-words flex-1 ${completed ? "text-muted-foreground" : ""}`}>
+                                  {lesson.title}
+                                </span>
+                                <div className="flex items-center gap-3 shrink-0">
+                                  <span className="text-sm text-muted-foreground hidden sm:flex items-center gap-1">
                                     <Clock className="h-4 w-4" />
                                     {lesson.duration}
                                   </span>
