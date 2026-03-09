@@ -316,8 +316,8 @@ export default function Lesson() {
                   <SectionRenderer key={index} section={section} />
                 ))}
 
-                {/* Navigation */}
-                <div className="flex items-center justify-between pt-8 border-t border-border/50">
+            {/* Navigation */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border/50">
                   <Link to="/curriculum">
                     <Button variant="outline">
                       <ArrowLeft className="h-4 w-4 mr-2" />
