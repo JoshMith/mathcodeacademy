@@ -54,6 +54,38 @@ function MathBlock({ math, display = false }: { math: string; display?: boolean 
   return <span ref={ref} />;
 }
 
+// Syntax-highlighted code block
+function CodeBlock({ title, language, code }: { title?: string; language?: string; code: string }) {
+  const codeRef = useRef<HTMLElement>(null);
+  const lang = (language || "").toLowerCase();
+  const prismLang = Prism.languages[lang] ? lang : "javascript";
+
+  useEffect(() => {
+    if (codeRef.current) {
+      Prism.highlightElement(codeRef.current);
+    }
+  }, [code, prismLang]);
+
+  return (
+    <div className="rounded-xl overflow-hidden border border-border min-w-0">
+      <div className="flex items-center gap-2 px-3 sm:px-4 py-3 bg-secondary/50 border-b border-border">
+        <Code className="h-4 w-4 text-primary shrink-0" />
+        <span className="font-medium text-sm truncate">{title}</span>
+        <Badge variant="outline" className="ml-auto text-xs shrink-0">
+          {language}
+        </Badge>
+      </div>
+      <div className="overflow-x-auto">
+        <pre className="p-3 sm:p-4 !bg-[hsl(222,47%,5%)] !m-0">
+          <code ref={codeRef} className={`language-${prismLang} font-mono text-sm`}>
+            {code}
+          </code>
+        </pre>
+      </div>
+    </div>
+  );
+}
+
 // Section renderer component
 function SectionRenderer({ section }: { section: LessonSection }) {
   switch (section.type) {
