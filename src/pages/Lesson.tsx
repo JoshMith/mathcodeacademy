@@ -7,6 +7,20 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import katex from "katex";
 import "katex/dist/katex.min.css";
+import Prism from "prismjs";
+import "prismjs/themes/prism-tomorrow.css";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-c";
+import "prismjs/components/prism-cpp";
+import "prismjs/components/prism-rust";
+import "prismjs/components/prism-solidity";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-sql";
+import "prismjs/components/prism-yaml";
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -40,6 +54,38 @@ function MathBlock({ math, display = false }: { math: string; display?: boolean 
   return <span ref={ref} />;
 }
 
+// Syntax-highlighted code block
+function CodeBlock({ title, language, code }: { title?: string; language?: string; code: string }) {
+  const codeRef = useRef<HTMLElement>(null);
+  const lang = (language || "").toLowerCase();
+  const prismLang = Prism.languages[lang] ? lang : "javascript";
+
+  useEffect(() => {
+    if (codeRef.current) {
+      Prism.highlightElement(codeRef.current);
+    }
+  }, [code, prismLang]);
+
+  return (
+    <div className="rounded-xl overflow-hidden border border-border min-w-0">
+      <div className="flex items-center gap-2 px-3 sm:px-4 py-3 bg-secondary/50 border-b border-border">
+        <Code className="h-4 w-4 text-primary shrink-0" />
+        <span className="font-medium text-sm truncate">{title}</span>
+        <Badge variant="outline" className="ml-auto text-xs shrink-0">
+          {language}
+        </Badge>
+      </div>
+      <div className="overflow-x-auto">
+        <pre className="p-3 sm:p-4 !bg-[hsl(222,47%,5%)] !m-0">
+          <code ref={codeRef} className={`language-${prismLang} font-mono text-sm`}>
+            {code}
+          </code>
+        </pre>
+      </div>
+    </div>
+  );
+}
+
 // Section renderer component
 function SectionRenderer({ section }: { section: LessonSection }) {
   switch (section.type) {
@@ -70,24 +116,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
         </div>
       );
     case "code":
-      return (
-        <div className="rounded-xl overflow-hidden border border-border min-w-0">
-          <div className="flex items-center gap-2 px-3 sm:px-4 py-3 bg-secondary/50 border-b border-border">
-            <Code className="h-4 w-4 text-primary shrink-0" />
-            <span className="font-medium text-sm truncate">{section.title}</span>
-            <Badge variant="outline" className="ml-auto text-xs shrink-0">
-              {section.language}
-            </Badge>
-          </div>
-          <div className="overflow-x-auto">
-            <pre className="p-3 sm:p-4 bg-[hsl(222,47%,5%)]">
-              <code className="font-mono text-sm text-foreground/90">
-                {section.code}
-              </code>
-            </pre>
-          </div>
-        </div>
-      );
+      return <CodeBlock title={section.title} language={section.language} code={section.code || ""} />;
     case "example":
       return (
         <div className="p-4 sm:p-5 rounded-xl bg-success/5 border border-success/20 min-w-0">
