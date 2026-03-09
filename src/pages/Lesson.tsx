@@ -385,7 +385,7 @@ export default function Lesson() {
                   </div>
                 ))}
 
-                <div className="flex items-center justify-between pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
                   <Button variant="outline" onClick={goBackToContent}>
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to Lesson
