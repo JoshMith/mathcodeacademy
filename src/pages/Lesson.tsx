@@ -90,21 +90,21 @@ function SectionRenderer({ section }: { section: LessonSection }) {
       );
     case "example":
       return (
-        <div className="p-5 rounded-xl bg-success/5 border border-success/20">
+        <div className="p-4 sm:p-5 rounded-xl bg-success/5 border border-success/20 min-w-0">
           <div className="flex items-center gap-2 text-success font-medium mb-3">
-            <BookOpen className="h-5 w-5" />
-            {section.title}
+            <BookOpen className="h-5 w-5 shrink-0" />
+            <span className="break-words">{section.title}</span>
           </div>
-          <div className="mb-3">
+          <div className="mb-3 break-words">
             <span className="font-medium">Problem: </span>
             <span className="text-muted-foreground">{section.problem}</span>
           </div>
-          <div className="p-4 rounded-lg bg-background/50 mb-3">
-            <pre className="text-sm text-muted-foreground whitespace-pre-wrap">
+          <div className="p-3 sm:p-4 rounded-lg bg-background/50 mb-3 overflow-x-auto">
+            <pre className="text-sm text-muted-foreground whitespace-pre-wrap break-words">
               {section.solution}
             </pre>
           </div>
-          <div className="text-center p-3 rounded-lg bg-success/10">
+          <div className="text-center p-2 sm:p-3 rounded-lg bg-success/10 overflow-x-auto">
             <MathBlock math={section.formula || ""} display />
           </div>
         </div>
