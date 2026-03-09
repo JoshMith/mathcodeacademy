@@ -61,10 +61,10 @@ function SectionRenderer({ section }: { section: LessonSection }) {
       );
     case "math":
       return (
-        <div className="p-5 rounded-xl glass-card">
-          <h3 className="font-display font-semibold text-lg mb-3">{section.title}</h3>
-          <p className="text-muted-foreground mb-4">{section.content}</p>
-          <div className="p-4 rounded-lg bg-background/50 text-center">
+        <div className="p-4 sm:p-5 rounded-xl glass-card min-w-0">
+          <h3 className="font-display font-semibold text-lg mb-3 break-words">{section.title}</h3>
+          <p className="text-muted-foreground mb-4 break-words">{section.content}</p>
+          <div className="p-2 sm:p-4 rounded-lg bg-background/50 text-center overflow-x-auto">
             <MathBlock math={section.formula || ""} display />
           </div>
         </div>
