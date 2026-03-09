@@ -345,12 +345,12 @@ export default function Lesson() {
                 </div>
 
                 {lessonContent.practices.map((question, qIndex) => (
-                  <div key={question.id} className="glass-card rounded-xl p-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                  <div key={question.id} className="glass-card rounded-xl p-4 sm:p-6 min-w-0">
+                    <div className="flex items-start gap-2 mb-4">
+                      <span className="flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary text-sm font-medium shrink-0">
                         {qIndex + 1}
                       </span>
-                      <h3 className="font-medium">{question.question}</h3>
+                      <h3 className="font-medium break-words">{question.question}</h3>
                     </div>
 
                     <div className="grid gap-2">
