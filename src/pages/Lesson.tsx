@@ -71,19 +71,21 @@ function SectionRenderer({ section }: { section: LessonSection }) {
       );
     case "code":
       return (
-        <div className="rounded-xl overflow-hidden border border-border">
-          <div className="flex items-center gap-2 px-4 py-3 bg-secondary/50 border-b border-border">
-            <Code className="h-4 w-4 text-primary" />
-            <span className="font-medium text-sm">{section.title}</span>
-            <Badge variant="outline" className="ml-auto text-xs">
+        <div className="rounded-xl overflow-hidden border border-border min-w-0">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-3 bg-secondary/50 border-b border-border">
+            <Code className="h-4 w-4 text-primary shrink-0" />
+            <span className="font-medium text-sm truncate">{section.title}</span>
+            <Badge variant="outline" className="ml-auto text-xs shrink-0">
               {section.language}
             </Badge>
           </div>
-          <pre className="p-4 overflow-x-auto bg-[hsl(222,47%,5%)]">
-            <code className="font-mono text-sm text-foreground/90">
-              {section.code}
-            </code>
-          </pre>
+          <div className="overflow-x-auto">
+            <pre className="p-3 sm:p-4 bg-[hsl(222,47%,5%)]">
+              <code className="font-mono text-sm text-foreground/90">
+                {section.code}
+              </code>
+            </pre>
+          </div>
         </div>
       );
     case "example":
