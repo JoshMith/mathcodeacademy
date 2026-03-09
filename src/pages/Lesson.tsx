@@ -28,6 +28,8 @@ import {
   CheckCircle2, 
   Clock, 
   Code,
+  Copy,
+  Check,
   Lightbulb,
   Play,
   Target,
