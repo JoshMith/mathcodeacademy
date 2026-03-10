@@ -289,7 +289,7 @@ export default function Curriculum() {
                   }`}
                 >
                   <track.icon className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{track.title}</span>
+                  <span>{track.title}</span>
                 </button>
               ))}
             </div>
