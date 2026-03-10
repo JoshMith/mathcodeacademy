@@ -176,6 +176,21 @@ const tracks = [
 
 export default function Curriculum() {
   const { isLessonCompleted } = useProgress();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredTracks = useMemo(() => {
+    if (!searchQuery.trim()) return tracks;
+    const q = searchQuery.toLowerCase();
+    return tracks
+      .map((track) => ({
+        ...track,
+        modules: track.modules.map((mod) => ({
+          ...mod,
+          lessons: mod.lessons.filter((l) => l.title.toLowerCase().includes(q)),
+        })).filter((mod) => mod.lessons.length > 0),
+      }))
+      .filter((track) => track.modules.length > 0);
+  }, [searchQuery]);
 
   // Calculate module progress based on completed lessons
   const getModuleProgress = (lessons: typeof allLessons) => {
