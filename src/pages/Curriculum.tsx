@@ -177,20 +177,43 @@ const tracks = [
 export default function Curriculum() {
   const { isLessonCompleted } = useProgress();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+
+  const levels = ["Beginner", "Intermediate", "Advanced"];
 
   const filteredTracks = useMemo(() => {
-    if (!searchQuery.trim()) return tracks;
-    const q = searchQuery.toLowerCase();
-    return tracks
-      .map((track) => ({
-        ...track,
-        modules: track.modules.map((mod) => ({
-          ...mod,
-          lessons: mod.lessons.filter((l) => l.title.toLowerCase().includes(q)),
-        })).filter((mod) => mod.lessons.length > 0),
-      }))
-      .filter((track) => track.modules.length > 0);
-  }, [searchQuery]);
+    let result = tracks;
+
+    if (selectedTrack) {
+      result = result.filter((t) => t.id === selectedTrack);
+    }
+    if (selectedLevel) {
+      result = result.filter((t) => t.level === selectedLevel);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result
+        .map((track) => ({
+          ...track,
+          modules: track.modules
+            .map((mod) => ({
+              ...mod,
+              lessons: mod.lessons.filter((l) => l.title.toLowerCase().includes(q)),
+            }))
+            .filter((mod) => mod.lessons.length > 0),
+        }))
+        .filter((track) => track.modules.length > 0);
+    }
+    return result;
+  }, [searchQuery, selectedTrack, selectedLevel]);
+
+  const hasActiveFilters = searchQuery || selectedTrack || selectedLevel;
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setSelectedTrack(null);
+    setSelectedLevel(null);
+  };
 
   // Calculate module progress based on completed lessons
   const getModuleProgress = (lessons: typeof allLessons) => {
