@@ -177,20 +177,43 @@ const tracks = [
 export default function Curriculum() {
   const { isLessonCompleted } = useProgress();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+
+  const levels = ["Beginner", "Intermediate", "Advanced"];
 
   const filteredTracks = useMemo(() => {
-    if (!searchQuery.trim()) return tracks;
-    const q = searchQuery.toLowerCase();
-    return tracks
-      .map((track) => ({
-        ...track,
-        modules: track.modules.map((mod) => ({
-          ...mod,
-          lessons: mod.lessons.filter((l) => l.title.toLowerCase().includes(q)),
-        })).filter((mod) => mod.lessons.length > 0),
-      }))
-      .filter((track) => track.modules.length > 0);
-  }, [searchQuery]);
+    let result = tracks;
+
+    if (selectedTrack) {
+      result = result.filter((t) => t.id === selectedTrack);
+    }
+    if (selectedLevel) {
+      result = result.filter((t) => t.level === selectedLevel);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result
+        .map((track) => ({
+          ...track,
+          modules: track.modules
+            .map((mod) => ({
+              ...mod,
+              lessons: mod.lessons.filter((l) => l.title.toLowerCase().includes(q)),
+            }))
+            .filter((mod) => mod.lessons.length > 0),
+        }))
+        .filter((track) => track.modules.length > 0);
+    }
+    return result;
+  }, [searchQuery, selectedTrack, selectedLevel]);
+
+  const hasActiveFilters = searchQuery || selectedTrack || selectedLevel;
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setSelectedTrack(null);
+    setSelectedLevel(null);
+  };
 
   // Calculate module progress based on completed lessons
   const getModuleProgress = (lessons: typeof allLessons) => {
@@ -236,13 +259,56 @@ export default function Curriculum() {
                 </button>
               )}
             </div>
+
+            {/* Filters */}
+            <div className="flex flex-wrap gap-2 mt-4">
+              {/* Level filters */}
+              {levels.map((level) => (
+                <button
+                  key={level}
+                  onClick={() => setSelectedLevel(selectedLevel === level ? null : level)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                    selectedLevel === level
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-secondary/50 text-muted-foreground border-border hover:border-primary/50"
+                  }`}
+                >
+                  {level}
+                </button>
+              ))}
+              <div className="w-px h-6 bg-border self-center mx-1 hidden sm:block" />
+              {/* Track filters */}
+              {tracks.map((track) => (
+                <button
+                  key={track.id}
+                  onClick={() => setSelectedTrack(selectedTrack === track.id ? null : track.id)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors flex items-center gap-1.5 ${
+                    selectedTrack === track.id
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-secondary/50 text-muted-foreground border-border hover:border-primary/50"
+                  }`}
+                >
+                  <track.icon className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{track.title}</span>
+                </button>
+              ))}
+            </div>
+
+            {hasActiveFilters && (
+              <button
+                onClick={clearAllFilters}
+                className="mt-3 text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+              >
+                Clear all filters
+              </button>
+            )}
           </motion.div>
 
           {/* Tracks */}
           <div className="space-y-8">
             {filteredTracks.length === 0 && (
               <div className="text-center py-12 text-muted-foreground">
-                No lessons found matching "{searchQuery}"
+                No lessons found{searchQuery ? ` matching "${searchQuery}"` : " for selected filters"}
               </div>
             )}
             {filteredTracks.map((track, trackIndex) => (
