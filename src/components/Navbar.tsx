@@ -165,7 +165,8 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <div className="flex gap-2 pt-4 border-t border-border/50">
+            <div className="flex items-center gap-2 pt-4 border-t border-border/50">
+              <ThemeToggle />
               {user ? (
                 <div className="w-full space-y-2">
                   <div className="flex items-center gap-2 px-3 py-2">
