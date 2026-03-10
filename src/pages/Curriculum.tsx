@@ -1,8 +1,10 @@
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { 
   BookOpen, 
   Code2, 
@@ -16,7 +18,9 @@ import {
   Cpu,
   Link as LinkIcon,
   Radio,
-  Database
+  Database,
+  Search,
+  X
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProgress } from "@/hooks/useProgress";
@@ -172,6 +176,21 @@ const tracks = [
 
 export default function Curriculum() {
   const { isLessonCompleted } = useProgress();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredTracks = useMemo(() => {
+    if (!searchQuery.trim()) return tracks;
+    const q = searchQuery.toLowerCase();
+    return tracks
+      .map((track) => ({
+        ...track,
+        modules: track.modules.map((mod) => ({
+          ...mod,
+          lessons: mod.lessons.filter((l) => l.title.toLowerCase().includes(q)),
+        })).filter((mod) => mod.lessons.length > 0),
+      }))
+      .filter((track) => track.modules.length > 0);
+  }, [searchQuery]);
 
   // Calculate module progress based on completed lessons
   const getModuleProgress = (lessons: typeof allLessons) => {
@@ -196,15 +215,37 @@ export default function Curriculum() {
             <h1 className="font-display text-4xl font-bold mb-4">
               Curriculum
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted-foreground mb-6">
               Explore our comprehensive curriculum designed to take you from beginner to expert 
               in programming mathematics.
             </p>
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search lessons..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-10"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
           </motion.div>
 
           {/* Tracks */}
           <div className="space-y-8">
-            {tracks.map((track, trackIndex) => (
+            {filteredTracks.length === 0 && (
+              <div className="text-center py-12 text-muted-foreground">
+                No lessons found matching "{searchQuery}"
+              </div>
+            )}
+            {filteredTracks.map((track, trackIndex) => (
               <motion.div
                 key={track.id}
                 initial={{ opacity: 0, y: 20 }}
