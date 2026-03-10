@@ -1,8 +1,10 @@
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { 
   BookOpen, 
   Code2, 
@@ -16,7 +18,9 @@ import {
   Cpu,
   Link as LinkIcon,
   Radio,
-  Database
+  Database,
+  Search,
+  X
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProgress } from "@/hooks/useProgress";
