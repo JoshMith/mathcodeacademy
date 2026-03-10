@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -79,7 +80,8 @@ export function Navbar() {
           })}
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -156,7 +158,8 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <div className="flex gap-2 pt-4 border-t border-border/50">
+            <div className="flex items-center gap-2 pt-4 border-t border-border/50">
+              <ThemeToggle />
               {user ? (
                 <div className="w-full space-y-2">
                   <div className="flex items-center gap-2 px-3 py-2">
