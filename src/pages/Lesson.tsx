@@ -134,7 +134,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
         </div>
       );
     case "code":
-      return <CodeBlock title={section.title} language={section.language} code={section.code || ""} />;
+      return <RunnableCodeBlock title={section.title} language={section.language} code={section.code || ""} />;
     case "example":
       return (
         <div className="p-4 sm:p-5 rounded-xl bg-success/5 border border-success/20 min-w-0">
