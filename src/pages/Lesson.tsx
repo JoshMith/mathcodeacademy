@@ -224,7 +224,7 @@ export default function Lesson() {
     );
   }
 
-  const progress = view === "practice" ? 100 : 50;
+  const progress = view === "practice" ? 100 : view === "playground" ? 75 : 50;
 
   const handleAnswer = (questionId: number, optionIndex: number) => {
     setAnswers({ ...answers, [questionId]: optionIndex });
