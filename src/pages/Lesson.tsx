@@ -161,7 +161,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
   }
 }
 
-type LessonView = "content" | "practice";
+type LessonView = "content" | "practice" | "playground";
 
 export default function Lesson() {
   const { trackId, moduleId, lessonId } = useParams();
