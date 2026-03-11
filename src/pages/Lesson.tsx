@@ -39,6 +39,8 @@ import {
 import { useProgress } from "@/hooks/useProgress";
 import { useAuth } from "@/hooks/useAuth";
 import { getLessonById, allLessons, type LessonContent, type LessonSection } from "@/data/lessons";
+import { RunnableCodeBlock } from "@/components/lesson/RunnableCodeBlock";
+import { CodePlayground } from "@/components/lesson/CodePlayground";
 
 // Math rendering component
 function MathBlock({ math, display = false }: { math: string; display?: boolean }) {
@@ -132,7 +134,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
         </div>
       );
     case "code":
-      return <CodeBlock title={section.title} language={section.language} code={section.code || ""} />;
+      return <RunnableCodeBlock title={section.title} language={section.language} code={section.code || ""} />;
     case "example":
       return (
         <div className="p-4 sm:p-5 rounded-xl bg-success/5 border border-success/20 min-w-0">
@@ -159,7 +161,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
   }
 }
 
-type LessonView = "content" | "practice";
+type LessonView = "content" | "practice" | "playground";
 
 export default function Lesson() {
   const { trackId, moduleId, lessonId } = useParams();
@@ -222,7 +224,7 @@ export default function Lesson() {
     );
   }
 
-  const progress = view === "practice" ? 100 : 50;
+  const progress = view === "practice" ? 100 : view === "playground" ? 75 : 50;
 
   const handleAnswer = (questionId: number, optionIndex: number) => {
     setAnswers({ ...answers, [questionId]: optionIndex });
@@ -230,6 +232,11 @@ export default function Lesson() {
 
   const goToPractice = () => {
     setView("practice");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const goToPlayground = () => {
+    setView("playground");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -344,6 +351,16 @@ export default function Lesson() {
               >
                 ✏️ Practice ({lessonContent.practices.length} questions)
               </button>
+              <button
+                onClick={goToPlayground}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  view === "playground"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary/50 text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                🧪 Playground
+              </button>
             </div>
           </motion.div>
 
@@ -376,7 +393,7 @@ export default function Lesson() {
                   </Button>
                 </div>
               </motion.div>
-            ) : (
+            ) : view === "practice" ? (
               <motion.div
                 key="practice"
                 initial={{ opacity: 0, x: 20 }}
@@ -483,6 +500,41 @@ export default function Lesson() {
                       </div>
                     </div>
                   )}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="playground"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="space-y-6"
+              >
+                <div className="text-center mb-4">
+                  <h2 className="font-display text-2xl font-bold mb-2">Code Playground</h2>
+                  <p className="text-muted-foreground">
+                    Experiment with code concepts from this lesson. Supports JavaScript, TypeScript & Python.
+                  </p>
+                </div>
+
+                <CodePlayground
+                  initialCode={
+                    lessonContent.sections.find(s => s.type === "code")?.code
+                  }
+                  initialLanguage={
+                    lessonContent.sections.find(s => s.type === "code")?.language
+                  }
+                />
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+                  <Button variant="outline" onClick={goBackToContent}>
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Lesson
+                  </Button>
+                  <Button variant="hero" onClick={goToPractice}>
+                    Start Practice
+                    <Play className="h-4 w-4 ml-2" />
+                  </Button>
                 </div>
               </motion.div>
             )}
