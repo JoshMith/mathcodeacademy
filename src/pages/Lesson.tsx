@@ -393,7 +393,7 @@ export default function Lesson() {
                   </Button>
                 </div>
               </motion.div>
-            ) : (
+            ) : view === "practice" ? (
               <motion.div
                 key="practice"
                 initial={{ opacity: 0, x: 20 }}
