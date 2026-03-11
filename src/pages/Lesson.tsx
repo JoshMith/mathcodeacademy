@@ -39,6 +39,8 @@ import {
 import { useProgress } from "@/hooks/useProgress";
 import { useAuth } from "@/hooks/useAuth";
 import { getLessonById, allLessons, type LessonContent, type LessonSection } from "@/data/lessons";
+import { RunnableCodeBlock } from "@/components/lesson/RunnableCodeBlock";
+import { CodePlayground } from "@/components/lesson/CodePlayground";
 
 // Math rendering component
 function MathBlock({ math, display = false }: { math: string; display?: boolean }) {
