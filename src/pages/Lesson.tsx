@@ -235,6 +235,11 @@ export default function Lesson() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const goToPlayground = () => {
+    setView("playground");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const goBackToContent = () => {
     setView("content");
     window.scrollTo({ top: 0, behavior: "smooth" });
