@@ -502,6 +502,41 @@ export default function Lesson() {
                   )}
                 </div>
               </motion.div>
+            ) : (
+              <motion.div
+                key="playground"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="space-y-6"
+              >
+                <div className="text-center mb-4">
+                  <h2 className="font-display text-2xl font-bold mb-2">Code Playground</h2>
+                  <p className="text-muted-foreground">
+                    Experiment with code concepts from this lesson. Supports JavaScript, TypeScript & Python.
+                  </p>
+                </div>
+
+                <CodePlayground
+                  initialCode={
+                    lessonContent.sections.find(s => s.type === "code")?.code
+                  }
+                  initialLanguage={
+                    lessonContent.sections.find(s => s.type === "code")?.language
+                  }
+                />
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+                  <Button variant="outline" onClick={goBackToContent}>
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Lesson
+                  </Button>
+                  <Button variant="hero" onClick={goToPractice}>
+                    Start Practice
+                    <Play className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
