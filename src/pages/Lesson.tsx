@@ -351,6 +351,16 @@ export default function Lesson() {
               >
                 ✏️ Practice ({lessonContent.practices.length} questions)
               </button>
+              <button
+                onClick={goToPlayground}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  view === "playground"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary/50 text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                🧪 Playground
+              </button>
             </div>
           </motion.div>
 
